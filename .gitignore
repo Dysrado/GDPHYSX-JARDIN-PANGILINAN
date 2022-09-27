@@ -30,3 +30,12 @@
 *.exe
 *.out
 *.app
+GL/.vs/GL/v17/Browse.VC.db
+GL/.vs/GL/v17/.suo
+GL/.vs/GL/v16/ipch/AutoPCH/feaea2eed3a3ab2e/MAIN.ipch
+GL/.vs/GL/v16/ipch/AutoPCH/e721683a8ec1a5d8/GLAD.ipch
+GL/.vs/GL/v16/ipch/AutoPCH/77cdf15a24036804/MAIN.ipch
+GL/.vs/GL/v16/Browse.VC.db
+GL/.vs/GL/v16/.suo
+GL/.vs/GL/FileContentIndex/read.lock
+GL/.vs/GL/FileContentIndex/c4ceac15-c80c-45f7-ae1b-db2c8310ab01.vsidx

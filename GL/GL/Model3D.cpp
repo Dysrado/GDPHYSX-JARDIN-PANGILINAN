@@ -53,16 +53,7 @@ void Model3D::integrate(float duration)
 {
 	this->velocity = velocity * duration;
 	position = position + velocity;
-	transform = glm::translate(transform, this->position);
-
-	glm::vec3 resultingAcc = glm::vec3(0,-9.8f,0);
-	resultingAcc = glm::vec3(resultingAcc + glm::vec3(0.001f * 1 / 3)); /*3 = Force, 1/3 is inverse of mass*/
-
-	velocity = glm::vec3(resultingAcc * duration);
-	//velocity *= pow(0.8, duration); /*0.8 damping*/
-
-
-
+	transform = glm::translate(transform, position);
 }
 
 // Renders or draws the model

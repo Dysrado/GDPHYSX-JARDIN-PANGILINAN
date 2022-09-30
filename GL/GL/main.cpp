@@ -1,4 +1,8 @@
-#include "Model3D.h" // From Video Lectures
+/* 
+    Made by Jardin and Pangilinan
+*/
+
+#include "Model3D.h" 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
 
@@ -15,7 +19,6 @@ int main(void)
     std::string warning, error;
     float clock = 0;
     bool startup = false;
-    bool q = true;
     tinyobj::attrib_t attributes1;
 
     bool success = tinyobj::LoadObj(&attributes1,
@@ -57,7 +60,7 @@ int main(void)
     float height = 800;
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(width, height, "Particle Hw Jardin Pangilinan", NULL, NULL);
+    window = glfwCreateWindow(width, height, "Particle Hw Jardin - Pangilinan", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -134,7 +137,6 @@ int main(void)
     glm::mat4 projection = glm::perspective(glm::radians(60.f), height / width, 0.f, 100.f);
 
 
-
     GLfloat pitch = 0.f;
     GLfloat yaw = -90.f;
 
@@ -155,11 +157,9 @@ int main(void)
     glm::mat4 view = glm::lookAt(cameraPos, cameraPos + F, WorldUp);
 
     // Initialize Model3D as object
-    std::vector <Model3D*> object;
     Model3D *temp = new Model3D();
     temp->initVariables(F * 5.f + cameraPos, glm::vec3(1,1,1), glm::vec3(0, 0, 0));
     temp->init();
-    object.push_back(temp);
 
     // Used for deltaTime computation
     float lastTime = glfwGetTime();
@@ -171,7 +171,6 @@ int main(void)
     {
         /* Current Time */
         GLfloat currTime = glfwGetTime();
-        float cooldownTimer = glfwGetTime();
 
         /* Time that has passed */
         float deltaTime = currTime - lastTime;
@@ -179,10 +178,10 @@ int main(void)
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Renders the vector of objects/Model3Ds
-        for (int i = 0; i < object.size(); i++) {
-            object[i]->render(shaderProgram);
-        }   
+        // Renders the vector of Model3D
+
+
+        temp->render(shaderProgram);
 
         // Uniform
         unsigned int projectionLoc = glGetUniformLocation(shaderProgram, "projection");
@@ -196,7 +195,6 @@ int main(void)
 
         // Bind
         glBindVertexArray(VAO);
-
 
 
         /* Swap front and back buffers */
@@ -217,26 +215,13 @@ int main(void)
             clock = 0.0f;
             temp->initVariables(F * 5.f + cameraPos, glm::vec3(1, 1, 1), glm::vec3(0, 0, 0));
             startup = false;
-            q = false;
-        }
-        else if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) { 
-            
         }
 
-        if (startup == false) {
-            temp->integrate(1.f);
-            startup = true;
-        std::cout << "This is being called\n";
+        if (startup == true) {
+            temp->integrate(deltaTime);
         }
 
-        //if (startup == true && q == true) {
-        //    //clock += 0.000001f;
-        //temp->integrate(0.001f);
-        //startup = false;
-        //q == false;
-
-        //}
-        //lastTime = currTime;
+        lastTime = currTime;
     }
 
     // Delete Buffers
@@ -244,10 +229,8 @@ int main(void)
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
 
-    // Delete the buffer in each object
-    for (int i = 0; i < object.size(); i++) {
-        object[i]->deleteVertex();
-    }
+
+    temp->deleteVertex();
 
     glfwTerminate();
     return 0;

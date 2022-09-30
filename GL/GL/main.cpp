@@ -13,7 +13,9 @@ int main(void)
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> material1;
     std::string warning, error;
-
+    float clock = 0;
+    bool startup = false;
+    bool q = true;
     tinyobj::attrib_t attributes1;
 
     bool success = tinyobj::LoadObj(&attributes1,
@@ -55,7 +57,7 @@ int main(void)
     float height = 800;
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(width, height, "Wayne Michael S. Pangilinan", NULL, NULL);
+    window = glfwCreateWindow(width, height, "Particle Hw Jardin Pangilinan", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -125,22 +127,13 @@ int main(void)
     glBindVertexArray(0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     
 
     /* ======================= Initialize Values ======================= */
     // Initailize Projection matrix
     glm::mat4 projection = glm::perspective(glm::radians(60.f), height / width, 0.f, 100.f);
 
-    // Initailize variables used for the mouse input
-    double mousePosX = 0;
-    double mousePosY = 0;
-    double lastMousePosX = 0;
-    double lastMousePosY = 0;
-    double mouseOffsetX = 0;
-    double mouseOffsetY = 0;
-    bool firstMouse = true;
+
 
     GLfloat pitch = 0.f;
     GLfloat yaw = -90.f;
@@ -174,7 +167,7 @@ int main(void)
     float lastCDTime = glfwGetTime();
 
     /* Loop until the user closes the window or user presses the Escape key*/
-    while (!glfwWindowShouldClose(window) && glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS)
+    while (!glfwWindowShouldClose(window))
     {
         /* Current Time */
         GLfloat currTime = glfwGetTime();
@@ -205,16 +198,6 @@ int main(void)
         glBindVertexArray(VAO);
 
 
-        // Update Values for View Based on the Yaw and Pitch
-        F.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-        F.y = sin(glm::radians(pitch));
-        F.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-
-        F = glm::normalize(F);
-        R = glm::normalize(glm::cross(F, WorldUp));
-        U = glm::normalize(glm::cross(R, F));
-
-        view = glm::lookAt(cameraPos, cameraPos + F, WorldUp);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
@@ -224,64 +207,36 @@ int main(void)
 
 
         /* Keyboard Input */
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) { // Move Forward
-            cameraPos += F * 5.f * deltaTime;
-        }
-        else if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) { // Move Forward
-            cameraPos -= F * 5.f * deltaTime;
-        }
-        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) { // Move Forward
-            cameraPos += R * 5.f * deltaTime;
-        }
-        else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) { // Move Forward
-            cameraPos -= R * 5.f * deltaTime; 
-        }
-        // If Cooldown has ended then you can click space
-        if (cooldownTimer > lastCDTime + 3) {
-            if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) { // When the conditions are satisfied get the time to reset the cooldown
-                lastCDTime = glfwGetTime();
-                // Creates a new Model3D
-                temp = new Model3D();
-                temp->initVariables(F * 5.f + cameraPos, glm::vec3(1, 1, 1), glm::vec3(0, 0, 0));
-                temp->init();
-                object.push_back(temp);
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) { 
+            if (startup == false) {
+                startup = true;
             }
+           
+        }
+        else if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
+            clock = 0.0f;
+            temp->initVariables(F * 5.f + cameraPos, glm::vec3(1, 1, 1), glm::vec3(0, 0, 0));
+            startup = false;
+            q = false;
+        }
+        else if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) { 
+            
         }
 
-        /* Mouse Input */
-        glfwGetCursorPos(window, &mousePosX, &mousePosY);
-
-        if (firstMouse) {
-            lastMousePosX = mousePosX;
-            lastMousePosY = mousePosY;
-            firstMouse = false;
+        if (startup == false) {
+            temp->integrate(1.f);
+            startup = true;
+        std::cout << "This is being called\n";
         }
 
-        // calculations for offset
-        mouseOffsetX = mousePosX - lastMousePosX;
-        mouseOffsetY = mousePosY - lastMousePosY;
+        //if (startup == true && q == true) {
+        //    //clock += 0.000001f;
+        //temp->integrate(0.001f);
+        //startup = false;
+        //q == false;
 
-        // Sets the last value of x and y
-        lastMousePosX = mousePosX;
-        lastMousePosY = mousePosY;
-
-        // Move the Yaw and Pitch
-        pitch -= static_cast<GLfloat>(mouseOffsetY) * 10.f * deltaTime;
-        yaw += static_cast<GLfloat>(mouseOffsetX) * 10.f * deltaTime;
-
-        // clamps or limits the pitch and yaw so that the user cannot continuously rotate 
-        if (pitch > 80.f) {
-            pitch = 80.f;
-        }
-        else if (pitch < -80.f) {
-            pitch = -80.f;
-        }
-        
-        if (yaw > 360.f || yaw < -360.f) {
-            yaw = 0.f;
-        }
-
-        lastTime = currTime;
+        //}
+        //lastTime = currTime;
     }
 
     // Delete Buffers

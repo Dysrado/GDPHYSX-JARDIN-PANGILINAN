@@ -5,5 +5,5 @@ out vec4 FragColor; //Returns a Color
 void main()
 {
     //               r   g   b   a     Ranges from 0->1
-    FragColor = vec4(0f, 0.6f, 0f, 1f); //Sets the color of the Fragment
+    FragColor = vec4(0, 0.6f, 0, 1); //Sets the color of the Fragment
 }

@@ -23,12 +23,17 @@ private:
 	glm::vec3 scale = glm::vec3(1);
 	glm::vec3 rotation = glm::vec3(0);
 	glm::mat4 transform = glm::mat4(1.f);
+	glm::vec3 velocity = glm::vec3(0);
+	glm::vec3 acceleration = glm::vec3(0);
 
 public:
+
 	void initVariables(glm::vec3 pos, glm::vec3 size, glm::vec3 rot);
 	void init();
+	void integrate(float duration);
 	
 	void render(GLuint shaderProgram);
 	void deleteVertex();
+
 };
 

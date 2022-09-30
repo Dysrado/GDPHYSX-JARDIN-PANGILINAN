@@ -5,7 +5,6 @@
 *.slo
 *.lo
 *.o
-*.obj
 
 # Precompiled Headers
 *.gch
@@ -24,7 +23,6 @@
 *.lai
 *.la
 *.a
-*.lib
 
 # Executables
 *.exe
@@ -39,3 +37,4 @@ GL/.vs/GL/v16/Browse.VC.db
 GL/.vs/GL/v16/.suo
 GL/.vs/GL/FileContentIndex/read.lock
 GL/.vs/GL/FileContentIndex/c4ceac15-c80c-45f7-ae1b-db2c8310ab01.vsidx
+*.ipch

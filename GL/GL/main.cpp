@@ -1,4 +1,4 @@
-/* 
+/*
     Made by Jardin and Pangilinan
 */
 
@@ -13,7 +13,7 @@ int main(void)
 
     // for the general shader
     std::string path = "3D/creeper.obj";
-   
+
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> material1;
     std::string warning, error;
@@ -24,13 +24,13 @@ int main(void)
     bool success = tinyobj::LoadObj(&attributes1,
         &shapes, &material1,
         &warning, &error, path.c_str());
- 
+
 
     std::vector<GLuint> mesh_indices;
     for (int i = 0; i < shapes[0].mesh.indices.size(); i++) {
         mesh_indices.push_back(shapes[0].mesh.indices[i].vertex_index);
     }
-    
+
 
     // Shader ===================================================
     // vertex shader
@@ -41,7 +41,7 @@ int main(void)
     std::string vertStr = vertStrStream.str();
 
     const char* vertSrc = vertStr.c_str();
-    
+
     // fragment shader
     std::fstream fragStream("Shader/sample.frag");
     std::stringstream fragStrStream;
@@ -86,7 +86,7 @@ int main(void)
 
     glLinkProgram(shaderProgram);
 
-    
+
     GLuint VAO, VBO, EBO; // addresses for both
 
     // Creating obj
@@ -130,41 +130,51 @@ int main(void)
     glBindVertexArray(0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-    
+
 
     /* ======================= Initialize Values ======================= */
     // Initailize Projection matrix
     glm::mat4 projection = glm::perspective(glm::radians(60.f), height / width, 0.f, 100.f);
 
 
-    GLfloat pitch = 0.f;
-    GLfloat yaw = -90.f;
-
-
     // Computing for the F, R, U, and View
-    glm::vec3 cameraPos = glm::vec3(0, 0, 0);
-    glm::vec3 WorldUp = glm::vec3(0, 1, 0);
+    glm::vec3 cameraPos = glm::vec3(3, 0, -10.f);
 
-    glm::vec3 F = glm::vec3(0,0,0);
-    F.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    F.y = sin(glm::radians(pitch));
-    F.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    glm::mat4 cameraPositionMatrix = glm::translate(glm::mat4(1.f), cameraPos * -1.f);
+
+    glm::vec3 WorldUp = glm::vec3(0, 1.f, 0);
+    glm::vec3 center = glm::vec3(0, 3.f, 0);
+
+    glm::vec3 F = glm::vec3(center - cameraPos);
 
     F = glm::normalize(F);
+
     glm::vec3 R = glm::normalize(glm::cross(F, WorldUp));
     glm::vec3 U = glm::normalize(glm::cross(R, F));
 
-    glm::mat4 view = glm::lookAt(cameraPos, cameraPos + F, WorldUp);
+    glm::mat4 cameraOrientation = glm::mat4(
+        glm::vec4(R, 0),
+        glm::vec4(U, 0),
+        glm::vec4((F * -1.f), 0),
+        glm::vec4(glm::vec3(0, 0, 0), 1)
+    );
+    glm::mat4 view = cameraOrientation * cameraPositionMatrix;
 
     // Initialize Model3D as object
-    Model3D *temp = new Model3D();
-    temp->initVariables(F * 5.f + cameraPos, glm::vec3(1,1,1), glm::vec3(0, 0, 0));
+    std::vector<Model3D*> particleList;
+    Model3D* temp = new Model3D();
+    //temp->initVariables(F * 5.f + cameraPos, glm::vec3(1,1,1), glm::vec3(0, 0, 0));
+    temp->initVariables(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0));
     temp->init();
+
+    particleList.push_back(temp);
 
     // Used for deltaTime computation
     float lastTime = glfwGetTime();
     // Used for Cooldown 
     float lastCDTime = glfwGetTime();
+    float totalDuration = 0;
+
 
     /* Loop until the user closes the window or user presses the Escape key*/
     while (!glfwWindowShouldClose(window))
@@ -174,14 +184,37 @@ int main(void)
 
         /* Time that has passed */
         float deltaTime = currTime - lastTime;
+        totalDuration += deltaTime;
 
-        /* Render here */
-        glClear(GL_COLOR_BUFFER_BIT);
+        /* Keyboard Input */
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+            if (startup == false) {
+                startup = true;
+            }
 
-        // Renders the vector of Model3D
+        }
+        else if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
+            //clock = 0.0f;
+            //temp->initVariables(F * 5.f + cameraPos, glm::vec3(1, 1, 1), glm::vec3(0, 0, 0));
+            Model3D* temp2 = new Model3D();
+            //temp2->initVariables(F * 5.f + cameraPos, glm::vec3(1, 1, 1), glm::vec3(0, 0, 0));
+            temp2->initVariables(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0));
+            temp2->init();
+           // totalDuration = 0;
+            //deltaTime = 0;
+            particleList.push_back(temp2);
+            //startup = false;
 
 
-        temp->render(shaderProgram);
+        }
+        for (int i = 0; i < particleList.size() - 1; i++) {
+            particleList[i]->integrate(deltaTime);
+        }
+        
+           
+
+        
+
 
         // Uniform
         unsigned int projectionLoc = glGetUniformLocation(shaderProgram, "projection");
@@ -204,21 +237,12 @@ int main(void)
         glfwPollEvents();
 
 
-        /* Keyboard Input */
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) { 
-            if (startup == false) {
-                startup = true;
-            }
-           
-        }
-        else if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
-            clock = 0.0f;
-            temp->initVariables(F * 5.f + cameraPos, glm::vec3(1, 1, 1), glm::vec3(0, 0, 0));
-            startup = false;
-        }
+        /* Render here */
+        glClear(GL_COLOR_BUFFER_BIT);
 
-        if (startup == true) {
-            temp->integrate(deltaTime);
+        // Renders the vector of Model3D
+        for (int i = 0; i < particleList.size() - 1; i++) {
+            particleList[i]->render(shaderProgram);
         }
 
         lastTime = currTime;

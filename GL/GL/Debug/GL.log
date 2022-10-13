@@ -1,1 +1,3 @@
-﻿  GL.vcxproj -> C:\Users\DysComfy\Saved Games\GDPHYSX-JARDIN-PANGILINAN\GL\Debug\GL.exe
+﻿  Model3D.cpp
+C:\Users\DysComfy\Saved Games\GDPHYSX-JARDIN-PANGILINAN\GL\GL\Model3D.cpp(28,20): warning C4018: '<': signed/unsigned mismatch
+  GL.vcxproj -> C:\Users\DysComfy\Saved Games\GDPHYSX-JARDIN-PANGILINAN\GL\Debug\GL.exe

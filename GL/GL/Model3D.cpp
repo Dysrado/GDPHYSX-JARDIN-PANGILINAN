@@ -49,12 +49,42 @@ void Model3D::init() {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
+
+
 void Model3D::integrate(float duration)
 {
-	this->velocity = velocity * duration;
-	position = position + velocity;
-	transform = glm::translate(transform, position);
+
+	if (duration > 0.0) {
+		//std::cout << "Duration:" << duration << std::endl;
+		
+		print();
+		
+		positionUpdate(duration);
+
+		
+		acceleration = inverseMass * glm::vec3(force/2,0,force);
+		acceleration.y = inverseMass * -gravity.y;
+		
+		velocity = acceleration * duration * duration * 0.5f;
+		velocity.x *= damping;
+		//velocity.y *= damping;
+		velocity.z *= damping;
+		
+		transform = glm::translate(transform, position);
+	}
+	
 }
+
+void Model3D::positionUpdate(float duration)
+{
+	//.this->position += velocity * duration + acceleration * duration * duration * 0.5f;
+	position += velocity * duration;
+
+
+
+}
+
+
 
 // Renders or draws the model
 void Model3D::render(GLuint shaderProgram) {
@@ -75,4 +105,11 @@ void Model3D::deleteVertex() {
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 	glDeleteBuffers(1, &EBO);
-};
+}
+void Model3D::print()
+{
+	std::cout << "Position X: " << this->position.x << std::endl
+		<< "Position Y: " << this->position.y << std::endl
+		<< "Position Z: " << this->position.z << std::endl;
+}
+;

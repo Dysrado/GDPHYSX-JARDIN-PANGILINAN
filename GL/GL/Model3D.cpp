@@ -17,7 +17,7 @@ void Model3D::initVariables(glm::vec3 pos, glm::vec3 size, glm::vec3 rot) {
 //Initializes the buffers
 void Model3D::init() {
 	// initialitation for the 3d Model
-	std::string path = "3D/creeper.obj";
+	std::string path = "3D/box.obj";
 	std::vector<tinyobj::shape_t> shapes;
 	std::vector<tinyobj::material_t> material;
 	std::string warning, error;
@@ -62,10 +62,15 @@ void Model3D::integrate(float duration, int type)
 		switch (type) {
 			case 0: //Pistol Bullet
 				positionUpdate(duration); //Updates the position of the projectile based on the time and velocity.
-				acceleration = inverseMass * glm::vec3(0, force, force); 
-				//acceleration.z *= 100;
-				velocity += acceleration * duration * duration * 0.5f;
-				acceleration.y *= -gravity;
+			
+				acceleration = inverseMass * glm::vec3(0, 5.0f,force); //* glm::vec3(0, force, force); 
+				//acceleration.y *= -gravity;
+				//velocity = acceleration * duration * duration * 0.5f;
+				velocity += acceleration * duration;
+				velocity.y -= gravity * duration;
+				
+				std::cout << "Velocity.y = " << velocity.y << std::endl;
+			//	acceleration.y *= -gravity;
 				
 				//velocity.z *= damping;
 
@@ -114,7 +119,7 @@ void Model3D::integrate(float duration, int type)
 
 void Model3D::positionUpdate(float duration)
 {
-	//.this->position += velocity * duration + acceleration * duration * duration * 0.5f;
+	//this->position += velocity * duration + acceleration * duration * duration * 0.5f;
 	position += velocity * duration;
 
 

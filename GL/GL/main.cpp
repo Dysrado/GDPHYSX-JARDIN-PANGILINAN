@@ -175,6 +175,15 @@ int main(void)
     float lastCDTime = glfwGetTime();
     float totalDuration = 0;
 
+    enum type {
+        PISTOL = 0,
+        ARTILLERY,
+        FIREBALL,
+        LASER,
+        FIREWORK
+    };
+
+    type projectileType = PISTOL;
 
     /* Loop until the user closes the window or user presses the Escape key*/
     while (!glfwWindowShouldClose(window))
@@ -187,28 +196,52 @@ int main(void)
         totalDuration += deltaTime;
 
         /* Keyboard Input */
-        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        /*if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
             if (startup == false) {
                 startup = true;
             }
 
+        }*/
+        if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
+            projectileType = PISTOL;
+
+
         }
-        else if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
+        else if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
+            projectileType = ARTILLERY;
+
+        }
+        else if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
+            projectileType = FIREBALL;
+
+
+        }
+        else if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
+            projectileType = LASER;
+
+
+        }
+        else if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS) {
+            projectileType = FIREWORK;
+
+
+        }
+
+        if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
             //clock = 0.0f;
-            //temp->initVariables(F * 5.f + cameraPos, glm::vec3(1, 1, 1), glm::vec3(0, 0, 0));
             Model3D* temp2 = new Model3D();
-            //temp2->initVariables(F * 5.f + cameraPos, glm::vec3(1, 1, 1), glm::vec3(0, 0, 0));
             temp2->initVariables(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0));
             temp2->init();
-           // totalDuration = 0;
-            //deltaTime = 0;
+            // totalDuration = 0;
+             //deltaTime = 0;
             particleList.push_back(temp2);
             //startup = false;
 
 
         }
+
         for (int i = 0; i < particleList.size() - 1; i++) {
-            particleList[i]->integrate(deltaTime);
+            particleList[i]->integrate(deltaTime, (int)projectileType);
         }
         
            

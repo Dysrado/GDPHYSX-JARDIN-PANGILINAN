@@ -12,7 +12,7 @@ int main(void)
     GLFWwindow* window;
 
     // for the general shader
-    std::string path = "3D/creeper.obj";
+    std::string path = "3D/box.obj";
 
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> material1;
@@ -163,13 +163,12 @@ int main(void)
     glm::mat4 view = cameraOrientation * cameraPositionMatrix;
 
     // Initialize Model3D as object
-    std::vector<Model3D*> particleList;
-    Model3D* temp = new Model3D();
-    //temp->initVariables(F * 5.f + cameraPos, glm::vec3(1,1,1), glm::vec3(0, 0, 0));
-    temp->initVariables(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0));
-    temp->init();
+    std::vector<Model3D*> particleList1; // pistol 
+    std::vector<Model3D*> particleList2; // artillery
+    std::vector<Model3D*> particleList3; // fireball
+    std::vector<Model3D*> particleList4; // laser
+    std::vector<Model3D*> particleList5; // firework
 
-    particleList.push_back(temp);
 
     // Used for deltaTime computation
     float lastTime = glfwGetTime();
@@ -195,18 +194,12 @@ int main(void)
 
         /* Time that has passed */
         float deltaTime = currTime - lastTime;
+        float cooldownTimer = glfwGetTime(); // used for cooldown
         totalDuration += deltaTime;
 
         /* Keyboard Input */
-        /*if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-            if (startup == false) {
-                startup = true;
-            }
-
-        }*/
         if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
             projectileType = PISTOL;
-
 
         }
         else if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
@@ -216,42 +209,65 @@ int main(void)
         else if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
             projectileType = FIREBALL;
 
-
         }
         else if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
             projectileType = LASER;
-
 
         }
         else if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS) {
             projectileType = FIREWORK;
 
-
         }
+        if (cooldownTimer > lastCDTime + 1) { // cooldown, every 1 second
+            if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+                lastCDTime = glfwGetTime();
+                //clock = 0.0f;
+                Model3D* temp2 = new Model3D();
+                temp2->initVariables(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0));
+                temp2->init();
+                // totalDuration = 0;
+                 //deltaTime = 0;
+                if (projectileType == PISTOL) {
+                    particleList1.push_back(temp2);
+                }
+                else if (projectileType == ARTILLERY) {
+                    particleList2.push_back(temp2);
+                }
+                else if (projectileType == FIREBALL) {
+                    particleList3.push_back(temp2);
+                }
+                else if (projectileType == LASER) {
+                    particleList4.push_back(temp2);
+                }
+                else if (projectileType == FIREWORK) {
+                    particleList5.push_back(temp2);
+                }
 
-        if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
-            //clock = 0.0f;
-            Model3D* temp2 = new Model3D();
-            temp2->initVariables(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0));
-            temp2->init();
-            // totalDuration = 0;
-             //deltaTime = 0;
-            particleList.push_back(temp2);
-            //startup = false;
+                //startup = false;
 
 
-        }
-
-        for (int i = 0; i < particleList.size() - 1; i++) {
-            particleList[i]->integrate(deltaTime, (int)projectileType);
+            }
         }
         
-           
 
-        
+        for (int i = 0; i < particleList1.size(); i++) {
+            particleList1[i]->integrate(deltaTime, PISTOL);
+        }
+        for (int i = 0; i < particleList2.size(); i++) {
+            particleList2[i]->integrate(deltaTime, ARTILLERY);
+        }
+        for (int i = 0; i < particleList3.size(); i++) {
+            particleList3[i]->integrate(deltaTime, FIREBALL);
+        }
+        for (int i = 0; i < particleList4.size(); i++) {
+            particleList4[i]->integrate(deltaTime, LASER);
+        }
+        for (int i = 0; i < particleList5.size(); i++) {
+            particleList5[i]->integrate(deltaTime, FIREWORK);
+        }
 
 
-        // Uniform
+        // Updates the Uniforms
         unsigned int projectionLoc = glGetUniformLocation(shaderProgram, "projection");
         glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
@@ -276,8 +292,20 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Renders the vector of Model3D
-        for (int i = 0; i < particleList.size() - 1; i++) {
-            particleList[i]->render(shaderProgram);
+        for (int i = 0; i < particleList1.size(); i++) {
+            particleList1[i]->render(shaderProgram);
+        }
+        for (int i = 0; i < particleList2.size(); i++) {
+            particleList2[i]->render(shaderProgram);
+        }
+        for (int i = 0; i < particleList3.size(); i++) {
+            particleList3[i]->render(shaderProgram);
+        }
+        for (int i = 0; i < particleList4.size(); i++) {
+            particleList4[i]->render(shaderProgram);
+        }
+        for (int i = 0; i < particleList5.size(); i++) {
+            particleList5[i]->render(shaderProgram);
         }
 
         lastTime = currTime;
@@ -288,8 +316,6 @@ int main(void)
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
 
-
-    temp->deleteVertex();
 
     glfwTerminate();
     return 0;

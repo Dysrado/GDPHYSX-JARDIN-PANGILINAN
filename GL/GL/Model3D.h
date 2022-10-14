@@ -26,7 +26,7 @@ private:
 
 
 
-	glm::vec3 velocity = glm::vec3(12);
+	glm::vec3 velocity = glm::vec3(0);
 	glm::vec3 acceleration;
 	glm::vec3 gravity = glm::vec3(10);
 	float force = 20;
@@ -39,7 +39,7 @@ public:
 
 	void initVariables(glm::vec3 pos, glm::vec3 size, glm::vec3 rot);
 	void init();
-	void integrate(float duration);
+	void integrate(float duration, int type);
 	void positionUpdate(float duration);
 	void render(GLuint shaderProgram);
 	void deleteVertex();

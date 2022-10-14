@@ -51,24 +51,59 @@ void Model3D::init() {
 
 
 
-void Model3D::integrate(float duration)
+void Model3D::integrate(float duration, int type)
 {
 
 	if (duration > 0.0) {
 		//std::cout << "Duration:" << duration << std::endl;
 		
-		print();
-		
-		positionUpdate(duration);
+		//print();
+
+		switch (type) {
+			case 1: //Pistol Bullet
+
+				positionUpdate(duration); //Updates the position of the projectile based on the time and velocity.
+				acceleration = inverseMass * glm::vec3(0, -gravity.y, force); 
+				velocity = acceleration * duration * duration * 0.5f;
+				velocity.z *= damping;
+
+				break;
+			case 2: //Artillery Bullet
+				positionUpdate(duration); //Updates the position of the projectile based on the time and velocity.
+				acceleration = inverseMass * glm::vec3(0, force, force);
+				acceleration.y = inverseMass * -gravity.y;
+				velocity = acceleration * duration * duration * 0.5f;
+				velocity.z *= damping;
+				break;
+			case 3: //Fireball
+				positionUpdate(duration); //Updates the position of the projectile based on the time and velocity.
+				acceleration = inverseMass * glm::vec3(0, force, force);
+				velocity = acceleration * duration * duration * 0.5f;
+				velocity.y *= damping;
+				velocity.z *= damping;
+				break;
+			case 4: //Laser
+				positionUpdate(duration); //Updates the position of the projectile based on the time and velocity.
+				acceleration = inverseMass * glm::vec3(0, 0, force);
+				velocity = acceleration * duration * duration * 0.5f;
+				
+				break;
+			
+
+		}
 
 		
-		acceleration = inverseMass * glm::vec3(force/2,0,force);
-		acceleration.y = inverseMass * -gravity.y;
+		//velocity = acceleration * duration * duration * 0.5f;
+		/*acceleration.z = inverseMass * force;
 		
-		velocity = acceleration * duration * duration * 0.5f;
-		velocity.x *= damping;
+		acceleration = inverseMass * glm::vec3(force/2,0,force);
+		acceleration.y = inverseMass * -gravity.y;*/
+		
+
+
+		//velocity.x *= damping;
 		//velocity.y *= damping;
-		velocity.z *= damping;
+		//velocity.z *= damping;
 		
 		transform = glm::translate(transform, position);
 	}

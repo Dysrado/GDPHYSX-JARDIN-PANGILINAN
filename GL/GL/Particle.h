@@ -14,7 +14,7 @@
 #include <iostream>
 #include <vector>
 
-class Model3D
+class Particle
 {
 protected:
 	glm::vec3 position = glm::vec3(0);
@@ -41,7 +41,6 @@ public:
 	void initVariables(glm::vec3 pos, glm::vec3 size, glm::vec3 rot, int type);
 	void init();
 	void integrate(float duration);
-	void positionUpdate(float duration);
 	void render(GLuint shaderProgram);
 	void deleteVertex();
 

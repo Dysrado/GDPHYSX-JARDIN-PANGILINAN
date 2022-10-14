@@ -1,8 +1,8 @@
-#include "Model3D.h"
+#include "Particle.h"
 #include <cmath>
 
 // Sets the position, scale, and rotation to the Particle class
-void Model3D::initVariables(glm::vec3 pos, glm::vec3 size, glm::vec3 rot, int type) {
+void Particle::initVariables(glm::vec3 pos, glm::vec3 size, glm::vec3 rot, int type) {
 	glm::mat4 identity = glm::mat4(1.f);
 	// Sets the Particle's location, scale and rotation to the parameters location, scale and rotation
 	switch (type) {
@@ -30,7 +30,12 @@ void Model3D::initVariables(glm::vec3 pos, glm::vec3 size, glm::vec3 rot, int ty
 			this->acceleration = glm::vec3(0, -1.0f, 0);
 			this->damping = 0.99f;
 			break;
-
+		case 4://When the particle selected is Firework Ammo
+			this->velocity = glm::vec3(0, 20.0f, -20.0f);
+			this->inverseMass = 1.0f;
+			this->acceleration = glm::vec3(0, -20.0f, 0);
+			this->damping = 0.99f;
+			break;
 	}
 	
 	this->position = pos;
@@ -44,7 +49,7 @@ void Model3D::initVariables(glm::vec3 pos, glm::vec3 size, glm::vec3 rot, int ty
 }
 
 //Initializes the buffers
-void Model3D::init() {
+void Particle::init() {
 	// initialitation for the Particle
 	std::string path = "3D/box.obj";
 	std::vector<tinyobj::shape_t> shapes;
@@ -80,7 +85,7 @@ void Model3D::init() {
 
 
 //Applies physics to the particles over deltaTime
-void Model3D::integrate(float duration)
+void Particle::integrate(float duration)
 {
 	if (duration > 0.0) { 
 		position += velocity * duration; //Updates the position vector of the particle
@@ -94,7 +99,7 @@ void Model3D::integrate(float duration)
 
 
 // Renders or draws the model
-void Model3D::render(GLuint shaderProgram) {
+void Particle::render(GLuint shaderProgram) {
 	// set the location
 	unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
 	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
@@ -107,7 +112,7 @@ void Model3D::render(GLuint shaderProgram) {
 };
 
 // Delete VAO, VBO, and EBO
-void Model3D::deleteVertex() {
+void Particle::deleteVertex() {
 	// delete the buffers
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);

@@ -1,10 +1,26 @@
-﻿  main.cpp
-D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(30,23): warning C4018: '<': signed/unsigned mismatch
-D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(63,38): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(63,31): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(173,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(175,22): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(192,26): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
-D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(243,27): warning C4018: '<': signed/unsigned mismatch
-D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(277,27): warning C4018: '<': signed/unsigned mismatch
+﻿  Firework.cpp
+D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\Firework.cpp(13,15): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  main.cpp
+D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(31,23): warning C4018: '<': signed/unsigned mismatch
+D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(64,38): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(64,31): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(177,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(179,22): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(196,26): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(200,29): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(231,41): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(259,27): warning C4018: '<': signed/unsigned mismatch
+D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(262,27): warning C4018: '<': signed/unsigned mismatch
+D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(265,27): warning C4018: '<': signed/unsigned mismatch
+D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(268,27): warning C4018: '<': signed/unsigned mismatch
+D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(271,27): warning C4018: '<': signed/unsigned mismatch
+D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(302,27): warning C4018: '<': signed/unsigned mismatch
+D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(305,27): warning C4018: '<': signed/unsigned mismatch
+D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(308,27): warning C4018: '<': signed/unsigned mismatch
+D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(311,27): warning C4018: '<': signed/unsigned mismatch
+D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(314,27): warning C4018: '<': signed/unsigned mismatch
+  Particle.cpp
+D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\Particle.cpp(62,20): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
   GL.vcxproj -> D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\Debug\GL.exe

@@ -200,22 +200,27 @@ int main(void)
         /* Keyboard Input */
         if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) {
             projectileType = PISTOL;
+            std::cout << "Currently set to Pistol Ammo\n";
 
         }
         else if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) {
             projectileType = ARTILLERY;
+            std::cout << "Currently set to Artillery Ammo\n";
 
         }
         else if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) {
             projectileType = FIREBALL;
+            std::cout << "Currently set to Fireball Ammo\n";
 
         }
         else if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) {
             projectileType = LASER;
+            std::cout << "Currently set to Laser Ammo\n";
 
         }
         else if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS) {
             projectileType = FIREWORK;
+            std::cout << "Currently set to Firework Ammo\n";
 
         }
         if (cooldownTimer > lastCDTime + 1) { // cooldown, every 1 second
@@ -223,7 +228,7 @@ int main(void)
                 lastCDTime = glfwGetTime();
                 //clock = 0.0f;
                 Model3D* temp2 = new Model3D();
-                temp2->initVariables(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0));
+                temp2->initVariables(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType);
                 temp2->init();
                 // totalDuration = 0;
                  //deltaTime = 0;

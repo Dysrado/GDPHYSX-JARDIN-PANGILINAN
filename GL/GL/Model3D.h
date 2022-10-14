@@ -32,12 +32,12 @@ private:
 	float force = 10.f;
 
 
-	float inverseMass = 5.0f;
+	float inverseMass = 2.0f;
 	float damping = 0.995f;
 
 public:
 
-	void initVariables(glm::vec3 pos, glm::vec3 size, glm::vec3 rot);
+	void initVariables(glm::vec3 pos, glm::vec3 size, glm::vec3 rot, int type);
 	void init();
 	void integrate(float duration, int type);
 	void positionUpdate(float duration);

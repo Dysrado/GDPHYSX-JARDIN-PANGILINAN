@@ -1,9 +1,26 @@
 #include "Model3D.h"
+#include <cmath>
 
 // Sets the position, scale, and rotation to te Model3D class
-void Model3D::initVariables(glm::vec3 pos, glm::vec3 size, glm::vec3 rot) {
+void Model3D::initVariables(glm::vec3 pos, glm::vec3 size, glm::vec3 rot, int type) {
 	glm::mat4 identity = glm::mat4(1.f);
 	// Sets the Model3D's location, scale and rotation to the parameters location, scale and rotation
+	switch (type) {
+		case 0:
+			this->acceleration = inverseMass * glm::vec3(0, 150.0f, 3000.0f);
+			break;
+		case 1:
+			this->acceleration = inverseMass * glm::vec3(0, 3000.0f, 3000.0f);
+			break;
+		case 2:
+			this->acceleration = inverseMass * glm::vec3(0, 1.0f, 1.0f);
+			break;
+		case 3:
+			this->acceleration = inverseMass * glm::vec3(0, 0, 300.0f);
+			break;
+
+	}
+	
 	this->position = pos;
 	this->rotation = rot;
 	this->scale = size;
@@ -62,38 +79,42 @@ void Model3D::integrate(float duration, int type)
 		switch (type) {
 			case 0: //Pistol Bullet
 				positionUpdate(duration); //Updates the position of the projectile based on the time and velocity.
-			
-				acceleration = inverseMass * glm::vec3(0, 5.0f,force); //* glm::vec3(0, force, force); 
+				acceleration.y -= gravity;
+				velocity += acceleration * duration;
+				velocity.z *= pow(damping, duration);
+				
+				 //* glm::vec3(0, force, force); 
 				//acceleration.y *= -gravity;
 				//velocity = acceleration * duration * duration * 0.5f;
-				velocity += acceleration * duration;
-				velocity.y -= gravity * duration;
+				//acceleration.y *= -gravity * duration;
+
+				//velocity.y = -gravity * duration;
 				
-				std::cout << "Velocity.y = " << velocity.y << std::endl;
-			//	acceleration.y *= -gravity;
+				/*std::cout << "Velocity.x = " << velocity.x;
+				std::cout << " Velocity.y = " << velocity.y;
+				std::cout << " Velocity.z = " << velocity.z << std::endl;*/
 				
-				//velocity.z *= damping;
 
 				break;
 			case 1: //Artillery Bullet
+				//positionUpdate(duration); //Updates the position of the projectile based on the time and velocity.
+				//acceleration = inverseMass * glm::vec3(0, force + -gravity, force);
+				////acceleration.y *= inverseMass * -gravity.y;
+				//velocity = acceleration * duration * duration * 0.5f;
+				//velocity.z *= damping;
 				positionUpdate(duration); //Updates the position of the projectile based on the time and velocity.
-				acceleration = inverseMass * glm::vec3(0, force + -gravity, force);
-				//acceleration.y *= inverseMass * -gravity.y;
-				velocity = acceleration * duration * duration * 0.5f;
-				velocity.z *= damping;
+				acceleration.y -= gravity;
+				velocity += acceleration * duration;
+				velocity.z *= pow(damping, duration);
 				break;
 			case 2: //Fireball
 				positionUpdate(duration); //Updates the position of the projectile based on the time and velocity.
-				acceleration = inverseMass * glm::vec3(0, gravity, force);
-				velocity = acceleration * duration * duration * 0.5f;
-				//velocity.y *= damping;
-				velocity.z *= damping;
+				velocity += acceleration * duration;
+				velocity.z *= pow(damping, duration);
 				break;
 			case 3: //Laser
 				positionUpdate(duration); //Updates the position of the projectile based on the time and velocity.
-				acceleration = inverseMass * glm::vec3(0, 0, force);
-				velocity = acceleration * duration * duration * 0.5f;
-				
+				velocity += acceleration * duration;
 				break;
 			
 
@@ -112,7 +133,7 @@ void Model3D::integrate(float duration, int type)
 		//velocity.y *= damping;
 		//velocity.z *= damping;
 		
-		transform = glm::translate(transform, position);
+		transform = glm::translate(glm::mat4(1.0f), position);
 	}
 	
 }

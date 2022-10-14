@@ -138,16 +138,18 @@ int main(void)
 
 
     // Computing for the F, R, U, and View
-    glm::vec3 cameraPos = glm::vec3(3, 0, -10.f);
+    glm::vec3 cameraPos = glm::vec3(-2 , 0, -10.f);
 
     glm::mat4 cameraPositionMatrix = glm::translate(glm::mat4(1.f), cameraPos * -1.f);
-
+    cameraPositionMatrix = glm::rotate(cameraPositionMatrix, 100.0f, glm::vec3(0,1,0));
+    
     glm::vec3 WorldUp = glm::vec3(0, 1.f, 0);
     glm::vec3 center = glm::vec3(0, 3.f, 0);
 
     glm::vec3 F = glm::vec3(center - cameraPos);
 
     F = glm::normalize(F);
+   
 
     glm::vec3 R = glm::normalize(glm::cross(F, WorldUp));
     glm::vec3 U = glm::normalize(glm::cross(R, F));

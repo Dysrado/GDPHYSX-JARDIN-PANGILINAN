@@ -60,29 +60,31 @@ void Model3D::integrate(float duration, int type)
 		//print();
 
 		switch (type) {
-			case 1: //Pistol Bullet
+			case 0: //Pistol Bullet
+				positionUpdate(duration); //Updates the position of the projectile based on the time and velocity.
+				acceleration = inverseMass * glm::vec3(0, force, force); 
+				//acceleration.z *= 100;
+				velocity += acceleration * duration * duration * 0.5f;
+				acceleration.y *= -gravity;
+				
+				//velocity.z *= damping;
 
-				positionUpdate(duration); //Updates the position of the projectile based on the time and velocity.
-				acceleration = inverseMass * glm::vec3(0, -gravity.y, force); 
-				velocity = acceleration * duration * duration * 0.5f;
-				velocity.z *= damping;
-
 				break;
-			case 2: //Artillery Bullet
+			case 1: //Artillery Bullet
 				positionUpdate(duration); //Updates the position of the projectile based on the time and velocity.
-				acceleration = inverseMass * glm::vec3(0, force, force);
-				acceleration.y = inverseMass * -gravity.y;
+				acceleration = inverseMass * glm::vec3(0, force + -gravity, force);
+				//acceleration.y *= inverseMass * -gravity.y;
 				velocity = acceleration * duration * duration * 0.5f;
 				velocity.z *= damping;
 				break;
-			case 3: //Fireball
+			case 2: //Fireball
 				positionUpdate(duration); //Updates the position of the projectile based on the time and velocity.
-				acceleration = inverseMass * glm::vec3(0, force, force);
+				acceleration = inverseMass * glm::vec3(0, gravity, force);
 				velocity = acceleration * duration * duration * 0.5f;
-				velocity.y *= damping;
+				//velocity.y *= damping;
 				velocity.z *= damping;
 				break;
-			case 4: //Laser
+			case 3: //Laser
 				positionUpdate(duration); //Updates the position of the projectile based on the time and velocity.
 				acceleration = inverseMass * glm::vec3(0, 0, force);
 				velocity = acceleration * duration * duration * 0.5f;

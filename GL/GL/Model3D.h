@@ -28,11 +28,11 @@ private:
 
 	glm::vec3 velocity = glm::vec3(0);
 	glm::vec3 acceleration;
-	glm::vec3 gravity = glm::vec3(10);
-	float force = 20;
+	float gravity = 15.0f;
+	float force = 10.f;
 
 
-	float inverseMass = 300.0f;
+	float inverseMass = 5.0f;
 	float damping = 0.995f;
 
 public:

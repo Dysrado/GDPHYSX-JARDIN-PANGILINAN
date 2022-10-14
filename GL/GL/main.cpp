@@ -248,7 +248,7 @@ int main(void)
                     particleList5.push_back(temp2);
                 }
 
-                //startup = false;
+
 
 
             }
@@ -256,19 +256,19 @@ int main(void)
         
 
         for (int i = 0; i < particleList1.size(); i++) {
-            particleList1[i]->integrate(deltaTime, PISTOL);
+            particleList1[i]->integrate(deltaTime);
         }
         for (int i = 0; i < particleList2.size(); i++) {
-            particleList2[i]->integrate(deltaTime, ARTILLERY);
+            particleList2[i]->integrate(deltaTime);
         }
         for (int i = 0; i < particleList3.size(); i++) {
-            particleList3[i]->integrate(deltaTime, FIREBALL);
+            particleList3[i]->integrate(deltaTime);
         }
         for (int i = 0; i < particleList4.size(); i++) {
-            particleList4[i]->integrate(deltaTime, LASER);
+            particleList4[i]->integrate(deltaTime);
         }
         for (int i = 0; i < particleList5.size(); i++) {
-            particleList5[i]->integrate(deltaTime, FIREWORK);
+            particleList5[i]->integrate(deltaTime);
         }
 
 

@@ -1,30 +1,30 @@
 #include "Model3D.h"
 #include <cmath>
 
-// Sets the position, scale, and rotation to te Model3D class
+// Sets the position, scale, and rotation to the Particle class
 void Model3D::initVariables(glm::vec3 pos, glm::vec3 size, glm::vec3 rot, int type) {
 	glm::mat4 identity = glm::mat4(1.f);
-	// Sets the Model3D's location, scale and rotation to the parameters location, scale and rotation
+	// Sets the Particle's location, scale and rotation to the parameters location, scale and rotation
 	switch (type) {
-		case 0:
+		case 0://When the particle selected is Pistol Ammo
 			this->velocity = glm::vec3(0, 0, 35.0f);
 			this->inverseMass = 50.0f;
 			this->acceleration = glm::vec3(0,-1.0f, 0);
 			this->damping = 0.99f;
 			break;
-		case 1:
+		case 1://When the particle selected is Artillery Ammo
 			this->velocity = glm::vec3(0,30.0f, 40.0f);
 			this->inverseMass = 1.0f;
 			this->acceleration = glm::vec3(0, -20.0f, 0);
 			this->damping = 0.99f;
 			break;
-		case 2:
+		case 2://When the particle selected is Fireball Ammo
 			this->velocity = glm::vec3(0, 0, 10.0f);
 			this->inverseMass = 5.0f;
 			this->acceleration = glm::vec3(0, 0.6f, 0);
 			this->damping = 0.9f;
 			break;
-		case 3:
+		case 3://When the particle selected is Laser Ammo
 			this->velocity = glm::vec3(0, 0, 100.0f);
 			this->inverseMass = 100.0f;
 			this->acceleration = glm::vec3(0, -1.0f, 0);
@@ -45,7 +45,7 @@ void Model3D::initVariables(glm::vec3 pos, glm::vec3 size, glm::vec3 rot, int ty
 
 //Initializes the buffers
 void Model3D::init() {
-	// initialitation for the 3d Model
+	// initialitation for the Particle
 	std::string path = "3D/box.obj";
 	std::vector<tinyobj::shape_t> shapes;
 	std::vector<tinyobj::material_t> material;
@@ -79,27 +79,16 @@ void Model3D::init() {
 }
 
 
-
-void Model3D::integrate(float duration, int type)
+//Applies physics to the particles over deltaTime
+void Model3D::integrate(float duration)
 {
-
-	if (duration > 0.0) {
-		positionUpdate(duration);
-		velocity += acceleration * duration;
-		velocity *= pow(damping, duration);
-
-		
-		transform = glm::translate(glm::mat4(1.0f), position);
+	if (duration > 0.0) { 
+		position += velocity * duration; //Updates the position vector of the particle
+		velocity += acceleration * duration; //Updates the velocity of the particle based on acceleration
+		velocity *= pow(damping, duration); //Applies damping to the velocity
+		transform = glm::translate(glm::mat4(1.0f), position); //Appliess linear transformation to the particle
 	}
 	
-}
-
-void Model3D::positionUpdate(float duration)
-{
-	position += velocity * duration;
-
-
-
 }
 
 
@@ -124,5 +113,3 @@ void Model3D::deleteVertex() {
 	glDeleteBuffers(1, &VBO);
 	glDeleteBuffers(1, &EBO);
 }
-
-;

@@ -23,7 +23,6 @@ void ParticleAnchoredSpring::updateForce(Particle* particle, float duration)
 
 	glm::normalize(force);
 	force *= -magnitude;
-	std::cout << "\nForce is X: " << force.x << ", Y: " << force.y << ", Z: " << force.z;
 	particle->addForce(force);
 
 }

@@ -10,6 +10,7 @@
 #include "ParticleGravity.h"
 #include "ParticleSpring.h"
 #include "ParticleAnchoredSpring.h"
+#include "ParticleBungee.h"
 
 
 int main(void)
@@ -187,24 +188,22 @@ int main(void)
         FIREWORK
     };
 
+    enum springType {
+        NONE = 0,
+        BASIC,
+        ANCHORED,
+        BUNGEE
+    };
+
     type projectileType = ARTILLERY;
+    springType spring = NONE;
 
     /* ======================= Force Values ======================= */
-    ParticleForceRegistry pfReg;
+    ParticleForceRegistry springReg;
     ParticleGravity* pg = new ParticleGravity(glm::vec3(0,-20,0));
 
-    // testing basic Spring
+    
 
-    Particle* a = new Particle();
-    Particle* b = new Particle();
-    a->initVariables(glm::vec3(0, -3, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType);
-    b->initVariables(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType);
-    a->init();
-   // b->init();
-    ParticleForceRegistry springReg;
-    /*ParticleSpring* ps = new ParticleSpring(b, 1.f, 2.f);*/
-    ParticleAnchoredSpring* pAs = new ParticleAnchoredSpring(&cameraPos, 1.f, 2.f);
-    springReg.add(a, pAs);
 
     /* Loop until the user closes the window or user presses the Escape key*/
     while (!glfwWindowShouldClose(window))
@@ -220,40 +219,80 @@ int main(void)
         /* Keyboard Input */
         if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) { // swaps to ARTILLERY
             projectileType = ARTILLERY;
+            spring = NONE;
             std::cout << "Currently set to Artillery Ammo\n";
 
         }
-        else if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS) { // swaps to Spring
+        else if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS) { // swaps to Basic Spring
             projectileType = ARTILLERY;
-            std::cout << "Currently set to Testing\n";
-
+            spring = BASIC;
+            std::cout << "Currently set to Basic Spring\n";
         }
+        else if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS) { // swaps to Anchored Spring
+            projectileType = ARTILLERY;
+            spring = ANCHORED;
+            std::cout << "Currently set to Anchored Spring\n";
+        }
+        else if (glfwGetKey(window, GLFW_KEY_8) == GLFW_PRESS) { // swaps to Bungee Spring
+            projectileType = ARTILLERY;
+            spring = BUNGEE;
+            std::cout << "Currently set to Bungee Spring\n";
+        }
+
         if (cooldownTimer > lastCDTime + 1) { // cooldown, every 1 second
             if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) { // on mouse button
                 lastCDTime = glfwGetTime();
-                Particle* temp2 = new Particle();
-                temp2->initVariables(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType); // instantiates a particle depenting on projectileType
-                temp2->init();
+                Particle* a = new Particle();
+                Particle* b = new Particle();
+                b->initVariables(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType);
+                b->init();
+                
 
-                if (projectileType == ARTILLERY) { // adds the particle to artillery list
+                if (projectileType == ARTILLERY && spring == NONE) { // adds the particle artillery
+                    Particle* temp2 = new Particle();
+                    temp2->initVariables(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType); // instantiates a particle depenting on projectileType
+                    temp2->init();
                     particleList.push_back(temp2);
-                    pfReg.add(particleList[particleList.size() - 1], pg);
+                    springReg.add(particleList[particleList.size() - 1], pg);
+                }
+
+                if (spring == BASIC) { // adds the particle Basic Spring
+                    a->initVariables(glm::vec3(0, -5, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType);
+                    a->init();
+                    
+                    ParticleSpring* ps = new ParticleSpring(b, 1.f, 2.f);
+                    springReg.add(a, ps);
+                    particleList.push_back(a);
+                    particleList.push_back(b);
+                }
+                else if(spring == ANCHORED) // adds the particle Anchored Spring
+                {
+                    a->initVariables(glm::vec3(0, -3, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType);
+                    a->init();
+
+                    ParticleAnchoredSpring* pAs = new ParticleAnchoredSpring(&cameraPos, 1.f, 2.f);
+                    springReg.add(a, pAs);
+                    particleList.push_back(a);
+                }
+                else if (spring == BUNGEE) { // adds the particle Bungee Spring
+                    a->initVariables(glm::vec3(0, -5, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType);
+                    a->init();
+
+                    ParticleBungee* ps = new ParticleBungee(b, 1.f, 2.f);
+                    springReg.add(a, ps);
+                    particleList.push_back(a);
+                    particleList.push_back(b);
                 }
                 
             }
         }
         
-        pfReg.updateForces(deltaTime);
         springReg.updateForces(deltaTime);
 
         // integrates all of the particle in their lists
         for (int i = 0; i < particleList.size(); i++) {
             particleList[i]->integrate(deltaTime);
         }
-        // spring testing
-        a->integrate(deltaTime);
-        b->integrate(deltaTime);
-
 
 
         // Updates the Uniforms
@@ -284,9 +323,6 @@ int main(void)
         for (int i = 0; i < particleList.size(); i++) {
             particleList[i]->render(shaderProgram);
         }
-
-        a->render(shaderProgram);
-        b->render(shaderProgram);
 
         lastTime = currTime;
     }

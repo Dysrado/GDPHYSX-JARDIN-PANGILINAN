@@ -2,6 +2,7 @@
 #include "ParticleForceGenerator.h"
 class ParticleGravity: public ParticleForceGenerator
 {
+private:
 	glm::vec3 gravity;
 
 public: 

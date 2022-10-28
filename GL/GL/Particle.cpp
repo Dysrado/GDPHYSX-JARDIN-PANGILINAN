@@ -6,41 +6,23 @@ float Particle::getMass()
 	return this->inverseMass;
 }
 
+glm::vec3 Particle::getPosition()
+{
+	return position;
+}
+
+
 // Sets the position, scale, and rotation to the Particle class
 void Particle::initVariables(glm::vec3 pos, glm::vec3 size, glm::vec3 rot, int type) {
 	glm::mat4 identity = glm::mat4(1.f);
 	// Sets the Particle's location, scale and rotation to the parameters location, scale and rotation
 	switch (type) {
-		case 0://When the particle selected is Pistol Ammo
-			this->velocity = glm::vec3(0, 0, 35.0f);
-			this->inverseMass = 50.0f;
-			this->acceleration = glm::vec3(0,-1.0f, 0);
-			this->damping = 0.99f;
-			break;
 		case 1://When the particle selected is Artillery Ammo
 			this->velocity = glm::vec3(0,30.0f, 40.0f);
 			this->inverseMass = 1.0f;
-			this->acceleration = glm::vec3(0, -20.0f, 0);
+			//this->acceleration = glm::vec3(0, -20.0f, 0);
 			this->damping = 0.99f;
-			break;
-		case 2://When the particle selected is Fireball Ammo
-			this->velocity = glm::vec3(0, 0, 10.0f);
-			this->inverseMass = 5.0f;
-			this->acceleration = glm::vec3(0, 0.6f, 0);
-			this->damping = 0.9f;
-			break;
-		case 3://When the particle selected is Laser Ammo
-			this->velocity = glm::vec3(0, 0, 100.0f);
-			this->inverseMass = 100.0f;
-			this->acceleration = glm::vec3(0, -1.0f, 0);
-			this->damping = 0.99f;
-			break;
-		case 4://When the particle selected is Firework Ammo
-			this->velocity = glm::vec3(0, 20.0f, -20.0f);
-			this->inverseMass = 1.0f;
-			this->acceleration = glm::vec3(0, -20.0f, 0);
-			this->damping = 0.99f;
-			break;
+			break;	
 	}
 	
 	this->position = pos;

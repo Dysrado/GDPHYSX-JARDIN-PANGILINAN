@@ -8,6 +8,7 @@
 #include "tiny_obj_loader.h"
 #include "ParticleForceRegistry.h"
 #include "ParticleGravity.h"
+#include "ParticleSpring.h"
 
 
 int main(void)
@@ -169,12 +170,7 @@ int main(void)
     glm::mat4 view = cameraOrientation * cameraPositionMatrix;
 
     // Initialize Particle as object
-    std::vector<Particle*> particleList1; // pistol 
-    std::vector<Particle*> particleList2; // artillery
-    std::vector<Particle*> particleList3; // fireball
-    std::vector<Particle*> particleList4; // laser
-    std::vector<Firework*> particleList5; // firework
-
+    std::vector<Particle*> particleList;
 
     // Used for deltaTime computation
     float lastTime = glfwGetTime();
@@ -190,13 +186,23 @@ int main(void)
         FIREWORK
     };
 
-    type projectileType = PISTOL;
+    type projectileType = ARTILLERY;
 
     /* ======================= Force Values ======================= */
     ParticleForceRegistry pfReg;
-    ParticleGravity* pg = new ParticleGravity(glm::vec3(0,-10,0));
-    pfReg.add(/*particle*/, pg);
-    pfReg.updateForces(Time.deltaTime);
+    ParticleGravity* pg = new ParticleGravity(glm::vec3(0,-20,0));
+
+    // testing basic Spring
+
+    Particle* a = new Particle();
+    Particle* b = new Particle();
+    a->initVariables(glm::vec3(0, -3, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType);
+    b->initVariables(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType);
+    a->init();
+    b->init();
+    ParticleForceRegistry springReg;
+    ParticleSpring* ps = new ParticleSpring(b, 1.f, 2.f);
+    springReg.add(a, ps);
 
     /* Loop until the user closes the window or user presses the Escape key*/
     while (!glfwWindowShouldClose(window))
@@ -210,29 +216,14 @@ int main(void)
         totalDuration += deltaTime;
 
         /* Keyboard Input */
-        if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS) { // swaps to PISTOL
-            projectileType = PISTOL;
-            std::cout << "Currently set to Pistol Ammo\n";
-
-        }
-        else if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) { // swaps to ARTILLERY
+        if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) { // swaps to ARTILLERY
             projectileType = ARTILLERY;
             std::cout << "Currently set to Artillery Ammo\n";
 
         }
-        else if (glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS) { // swaps to FIREBALL
-            projectileType = FIREBALL;
-            std::cout << "Currently set to Fireball Ammo\n";
-
-        }
-        else if (glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS) { // swaps to LASER
-            projectileType = LASER;
-            std::cout << "Currently set to Laser Ammo\n";
-
-        }
-        else if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS) { // swaps to FIREWORK
-            projectileType = FIREWORK;
-            std::cout << "Currently set to Firework Ammo\n";
+        else if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS) { // swaps to Spring
+            projectileType = ARTILLERY;
+            std::cout << "Currently set to Testing\n";
 
         }
         if (cooldownTimer > lastCDTime + 1) { // cooldown, every 1 second
@@ -242,45 +233,25 @@ int main(void)
                 temp2->initVariables(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType); // instantiates a particle depenting on projectileType
                 temp2->init();
 
-                if (projectileType == PISTOL) { // adds the particle to pistol list
-                    particleList1.push_back(temp2);
+                if (projectileType == ARTILLERY) { // adds the particle to artillery list
+                    particleList.push_back(temp2);
+                    pfReg.add(particleList[particleList.size() - 1], pg);
                 }
-                else if (projectileType == ARTILLERY) { // adds the particle to artillery list
-                    particleList2.push_back(temp2);
-                }
-                else if (projectileType == FIREBALL) { // adds the particle to fireball list
-                    particleList3.push_back(temp2);
-                }
-                else if (projectileType == LASER) { // adds the particle to laser list
-                    particleList4.push_back(temp2);
-                }
-                else if (projectileType == FIREWORK) { // adds the particle to firework list
-                    Firework* tempF = new Firework(rand() % 5 + 1);
-                    tempF->initVariables(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), FIREBALL);
-                    tempF->init();
-                    particleList5.push_back(tempF);
-                }
+                
             }
         }
         
+        pfReg.updateForces(deltaTime);
+        springReg.updateForces(deltaTime);
 
         // integrates all of the particle in their lists
-        for (int i = 0; i < particleList1.size(); i++) {
-            particleList1[i]->integrate(deltaTime);
+        for (int i = 0; i < particleList.size(); i++) {
+            particleList[i]->integrate(deltaTime);
         }
-        for (int i = 0; i < particleList2.size(); i++) {
-            particleList2[i]->integrate(deltaTime);
-        }
-        for (int i = 0; i < particleList3.size(); i++) {
-            particleList3[i]->integrate(deltaTime);
-        }
-        for (int i = 0; i < particleList4.size(); i++) {
-            particleList4[i]->integrate(deltaTime);
-        }
-        for (int i = 0; i < particleList5.size(); i++) {
-            particleList5[i]->update(deltaTime, &particleList5);
-            particleList5[i]->integrate(deltaTime);
-        }
+        // spring testing
+        a->integrate(deltaTime);
+        b->integrate(deltaTime);
+
 
 
         // Updates the Uniforms
@@ -308,21 +279,12 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Renders the vector of Particles
-        for (int i = 0; i < particleList1.size(); i++) {
-            particleList1[i]->render(shaderProgram);
+        for (int i = 0; i < particleList.size(); i++) {
+            particleList[i]->render(shaderProgram);
         }
-        for (int i = 0; i < particleList2.size(); i++) {
-            particleList2[i]->render(shaderProgram);
-        }
-        for (int i = 0; i < particleList3.size(); i++) {
-            particleList3[i]->render(shaderProgram);
-        }
-        for (int i = 0; i < particleList4.size(); i++) {
-            particleList4[i]->render(shaderProgram);
-        }
-        for (int i = 0; i < particleList5.size(); i++) {
-            particleList5[i]->render(shaderProgram);
-        }
+
+        a->render(shaderProgram);
+        b->render(shaderProgram);
 
         lastTime = currTime;
     }
@@ -333,20 +295,8 @@ int main(void)
     glDeleteBuffers(1, &EBO);
 
     // Delete Buffers for the lists
-    for (int i = 0; i < particleList1.size(); i++) {
-        particleList1[i]->deleteVertex();
-    }
-    for (int i = 0; i < particleList2.size(); i++) {
-        particleList2[i]->deleteVertex();
-    }
-    for (int i = 0; i < particleList3.size(); i++) {
-        particleList3[i]->deleteVertex();
-    }
-    for (int i = 0; i < particleList4.size(); i++) {
-        particleList4[i]->deleteVertex();
-    }
-    for (int i = 0; i < particleList5.size(); i++) {
-        particleList5[i]->deleteVertex();
+    for (int i = 0; i < particleList.size(); i++) {
+        particleList[i]->deleteVertex();
     }
 
 

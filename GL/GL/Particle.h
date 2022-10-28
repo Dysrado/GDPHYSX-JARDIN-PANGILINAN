@@ -39,6 +39,7 @@ private:
 
 public:
 	float getMass();
+	glm::vec3 getPosition();
 	void initVariables(glm::vec3 pos, glm::vec3 size, glm::vec3 rot, int type);
 	void init();
 	void integrate(float duration);

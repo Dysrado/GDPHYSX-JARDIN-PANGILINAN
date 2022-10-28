@@ -9,6 +9,7 @@
 #include "ParticleForceRegistry.h"
 #include "ParticleGravity.h"
 #include "ParticleSpring.h"
+#include "ParticleAnchoredSpring.h"
 
 
 int main(void)
@@ -199,10 +200,11 @@ int main(void)
     a->initVariables(glm::vec3(0, -3, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType);
     b->initVariables(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType);
     a->init();
-    b->init();
+   // b->init();
     ParticleForceRegistry springReg;
-    ParticleSpring* ps = new ParticleSpring(b, 1.f, 2.f);
-    springReg.add(a, ps);
+    /*ParticleSpring* ps = new ParticleSpring(b, 1.f, 2.f);*/
+    ParticleAnchoredSpring* pAs = new ParticleAnchoredSpring(&cameraPos, 1.f, 2.f);
+    springReg.add(a, pAs);
 
     /* Loop until the user closes the window or user presses the Escape key*/
     while (!glfwWindowShouldClose(window))

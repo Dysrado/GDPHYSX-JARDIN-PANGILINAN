@@ -106,3 +106,7 @@ GL/GL/Debug/main.obj
 GL/GL/Debug/Model3D.obj
 GL/GL/Debug/vc142.idb
 GL/GL/Debug/vc142.pdb
+GL/.vs/GL/v16/ipch/AutoPCH/160b7cd9a1d83ba8/PARTICLEANCHOREDSPRING.ipch
+GL/.vs/GL/v16/ipch/AutoPCH/c01d89fb1b8a9bc3/PARTICLEGRAVITY.ipch
+GL/.vs/GL/v16/ipch/AutoPCH/d242f776c4dfff38/PARTICLESPRING.ipch
+GL/.vs/GL/v16/ipch/AutoPCH/f9fb8f462a62d92d/PARTICLEFORCEREGISTRY.ipch

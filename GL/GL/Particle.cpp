@@ -1,6 +1,11 @@
 #include "Particle.h"
 #include <cmath>
 
+float Particle::getMass()
+{
+	return this->inverseMass;
+}
+
 // Sets the position, scale, and rotation to the Particle class
 void Particle::initVariables(glm::vec3 pos, glm::vec3 size, glm::vec3 rot, int type) {
 	glm::mat4 identity = glm::mat4(1.f);
@@ -90,8 +95,16 @@ void Particle::integrate(float duration)
 	if (duration > 0.0) { 
 		position += velocity * duration; //Updates the position vector of the particle
 		velocity += acceleration * duration; //Updates the velocity of the particle based on acceleration
+
+		glm::vec3 resultAcc = acceleration;
+		//Update forces
+		
+		resultAcc += forceAccum * inverseMass;
+		velocity += resultAcc * duration;
+		//velocity += acceleration * duration; //Updates the velocity of the particle based on acceleration
 		velocity *= pow(damping, duration); //Applies damping to the velocity
 		transform = glm::translate(glm::mat4(1.0f), position); //Appliess linear transformation to the particle
+		clearAccum();
 	}
 	
 }
@@ -117,4 +130,14 @@ void Particle::deleteVertex() {
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 	glDeleteBuffers(1, &EBO);
+}
+
+void Particle::clearAccum()
+{
+	forceAccum = glm::vec3(0);
+}
+
+void Particle::addForce(const glm::vec3& force)
+{
+	forceAccum += force;
 }

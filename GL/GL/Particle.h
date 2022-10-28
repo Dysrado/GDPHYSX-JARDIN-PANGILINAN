@@ -18,6 +18,7 @@ class Particle
 {
 protected:
 	glm::vec3 position = glm::vec3(0);
+	float inverseMass = 0.f;
 private:
 	GLuint VAO = 0, VBO = 0, EBO = 0;
 	std::vector<GLuint> mesh_indices;
@@ -30,20 +31,21 @@ private:
 	glm::vec3 velocity = glm::vec3(0);
 	glm::vec3 acceleration;
 	float gravity = 15.0f;
-	float force = 10.f;
+	float force = 0.1f;
 
-
-	float inverseMass = 2.0f;
-	float damping = 0.995f;
+	glm::vec3 forceAccum;
+	
+	float damping = 0.f;
 
 public:
-
+	float getMass();
 	void initVariables(glm::vec3 pos, glm::vec3 size, glm::vec3 rot, int type);
 	void init();
 	void integrate(float duration);
 	void render(GLuint shaderProgram);
 	void deleteVertex();
-
+	void clearAccum();
+	void addForce(const glm::vec3& force);
 
 };
 

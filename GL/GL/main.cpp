@@ -6,6 +6,8 @@
 #include "Firework.h" 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
+#include "ParticleForceRegistry.h"
+#include "ParticleGravity.h"
 
 
 int main(void)
@@ -189,6 +191,12 @@ int main(void)
     };
 
     type projectileType = PISTOL;
+
+    /* ======================= Force Values ======================= */
+    ParticleForceRegistry pfReg;
+    ParticleGravity* pg = new ParticleGravity(glm::vec3(0,-10,0));
+    pfReg.add(/*particle*/, pg);
+    pfReg.updateForces(Time.deltaTime);
 
     /* Loop until the user closes the window or user presses the Escape key*/
     while (!glfwWindowShouldClose(window))

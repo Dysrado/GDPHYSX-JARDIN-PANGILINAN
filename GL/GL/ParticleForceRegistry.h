@@ -20,6 +20,6 @@ public:
 
 	void clear();
 
-	void updateForces(float duration);
+	void updateForces(float duration); 
 };
 

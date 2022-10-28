@@ -223,17 +223,17 @@ int main(void)
             std::cout << "Currently set to Artillery Ammo\n";
 
         }
-        else if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS) { // swaps to Basic Spring
+        else if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS) { // swaps to Basic Spring
             projectileType = ARTILLERY;
             spring = BASIC;
             std::cout << "Currently set to Basic Spring\n";
         }
-        else if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS) { // swaps to Anchored Spring
+        else if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS) { // swaps to Anchored Spring
             projectileType = ARTILLERY;
             spring = ANCHORED;
             std::cout << "Currently set to Anchored Spring\n";
         }
-        else if (glfwGetKey(window, GLFW_KEY_8) == GLFW_PRESS) { // swaps to Bungee Spring
+        else if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS) { // swaps to Bungee Spring
             projectileType = ARTILLERY;
             spring = BUNGEE;
             std::cout << "Currently set to Bungee Spring\n";

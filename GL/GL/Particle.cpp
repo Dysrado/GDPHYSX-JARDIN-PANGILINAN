@@ -30,7 +30,7 @@ void Particle::initVariables(glm::vec3 pos, glm::vec3 size, glm::vec3 rot, int t
 			break;	
 		case 2:
 			this->velocity = glm::vec3(0, 0, 0);
-			this->inverseMass = 1.0f;
+			this->inverseMass = 0.9f;
 			//this->acceleration = glm::vec3(0, -20.0f, 0);
 			this->damping = 0.99f;
 	}

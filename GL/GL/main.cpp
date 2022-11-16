@@ -205,11 +205,12 @@ int main(void)
 
     /* ======================= Force Values ======================= */
     //ParticleForceRegistry springReg;
-    //ParticleGravity* pg = new ParticleGravity(glm::vec3(0,-20,0));
+    ParticleGravity* pg = new ParticleGravity(glm::vec3(0,-20,0));
 
     const static unsigned maxContacts = 256;
     ParticleWorld world(maxContacts);
 
+    world.push_back(box);
     /* Loop until the user closes the window or user presses the Escape key*/
     while (!glfwWindowShouldClose(window))
     {
@@ -260,13 +261,13 @@ int main(void)
                     temp2->initVariables(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType); // instantiates a particle depenting on projectileType
                     temp2->init();
                     
-                    while (world.firstParticle->next != nullptr) {
-                        world.firstParticle = world.firstParticle->next;
-                    }
-                    world.firstParticle->particle = temp2;
-                    world.firstParticle->next = nullptr;
+                    world.push_back(temp2);
                     //particleList.push_back(temp2);
                     //springReg.add(particleList[particleList.size() - 1], pg);
+                    while (world.firstParticle->next != NULL) {
+                        world.firstParticle = world.firstParticle->next;
+                    }
+                    world.registry.add(world.firstParticle->particle, pg);
                 }
 
                 //if (spring == BASIC) { // adds the particle Basic Spring
@@ -307,7 +308,7 @@ int main(void)
         //    particleList[i]->integrate(deltaTime);
         //}
 
-        box->integrate(deltaTime);
+        //box->integrate(deltaTime);
 
         // Updates the Uniforms
         unsigned int projectionLoc = glGetUniformLocation(shaderProgram, "projection");
@@ -338,12 +339,12 @@ int main(void)
         //    particleList[i]->render(shaderProgram);
         //}
 
-        while (world.firstParticle->next != nullptr) {
+        while (world.firstParticle != NULL) {
             world.firstParticle->particle->render(shaderProgram);
             world.firstParticle = world.firstParticle->next;
         }
 
-        box->render(shaderProgram);
+        //box->render(shaderProgram);
 
         world.runPhysics(deltaTime);
 
@@ -355,12 +356,12 @@ int main(void)
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
 
-    // Delete Buffers for the lists
-    for (int i = 0; i < particleList.size(); i++) {
-        particleList[i]->deleteVertex();
-    }
+    //// Delete Buffers for the lists
+    //for (int i = 0; i < particleList.size(); i++) {
+    //    particleList[i]->deleteVertex();
+    //}
 
-    box->deleteVertex();
+    //box->deleteVertex();
 
     glfwTerminate();
     return 0;

@@ -10,7 +10,6 @@ class ParticleWorld
 		Particle* particle;
 		ParticleRegistration* next;
 	};
-	ParticleForceRegistry registry;
 	ParticleContactResolver resolver;
 
 	struct ContactGenRegistration {
@@ -25,11 +24,14 @@ class ParticleWorld
 
 public:
 	ParticleRegistration* firstParticle;
+	ParticleForceRegistry registry;
 	ParticleWorld(unsigned maxContacts, unsigned iterations = 0);
 	void startFrame();
 	unsigned generateContacts();
 	void integrate(float duration);
 	void runPhysics(float duration);
+
+	void push_back(Particle *particle);
 
 };
 

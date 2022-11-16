@@ -4,8 +4,6 @@ ParticleWorld::ParticleWorld(unsigned maxContacts, unsigned iterations):resolver
 {
 	contacts = new ParticleContact[maxContacts];
 	calculateIterations = (iterations == 0);
-	firstParticle = new ParticleRegistration();
-	firstParticle->next = nullptr;
 }
 
 void ParticleWorld::startFrame()
@@ -47,4 +45,23 @@ void ParticleWorld::runPhysics(float duration) {
 	unsigned usedContacts = generateContacts();
 	if (calculateIterations) resolver.setIterations(usedContacts * 2); //IDK WHAT THIS DOES
 	resolver.resolveContacts(contacts, usedContacts, duration);
+}
+
+void ParticleWorld::push_back(Particle* particle)
+{
+	ParticleRegistration* temp = new ParticleRegistration();
+	temp->particle = particle;
+	temp->next = NULL;
+
+	if (firstParticle == NULL) {
+		firstParticle = temp;
+	}
+	else {
+		ParticleRegistration* traverse = firstParticle;
+		while (traverse->next != NULL) {
+			traverse = traverse->next;
+		}
+		traverse->next = temp;
+
+	}
 }

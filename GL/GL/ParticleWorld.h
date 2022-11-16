@@ -21,7 +21,7 @@ class ParticleWorld
 	ContactGenRegistration* firstContactGen;
 
 	ParticleContact* contacts;
-
+	bool calculateIterations;
 	unsigned maxContacts;
 
 public:
@@ -30,5 +30,6 @@ public:
 	unsigned generateContacts();
 	void integrate(float duration);
 	void runPhysics(float duration);
+
 };
 

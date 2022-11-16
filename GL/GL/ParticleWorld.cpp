@@ -1,12 +1,15 @@
 #include "ParticleWorld.h"
 
-ParticleWorld::ParticleWorld(unsigned maxContacts, unsigned iterations)
+ParticleWorld::ParticleWorld(unsigned maxContacts, unsigned iterations):resolver(iterations), maxContacts(maxContacts)
 {
+	contacts = new ParticleContact[maxContacts];
+	calculateIterations = (iterations == 0);
+	
 }
 
 void ParticleWorld::startFrame()
 {
-	particleRegistration* reg = firstParticle;
+	ParticleRegistration* reg = firstParticle;
 	while (reg) {
 		reg->particle->clearAccum();
 		reg = reg->next;
@@ -19,7 +22,7 @@ unsigned ParticleWorld::generateContacts()
 	ParticleContact* nextContact = contacts;
 	ContactGenRegistration* reg = firstContactGen;
 	while (reg) {
-		//unsigned used = reg->gen
+		unsigned used = reg->gen->addContact(nextContact, limit);
 		limit -= used;
 		nextContact += used;
 		if (limit <= 0)

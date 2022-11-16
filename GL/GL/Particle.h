@@ -40,6 +40,7 @@ private:
 public:
 	float getMass();
 	glm::vec3 getPosition();
+	void setPosition(glm::vec3 pos);
 	void initVariables(glm::vec3 pos, glm::vec3 size, glm::vec3 rot, int type);
 	void init();
 	void integrate(float duration);
@@ -47,6 +48,9 @@ public:
 	void deleteVertex();
 	void clearAccum();
 	void addForce(const glm::vec3& force);
+	glm::vec3 getVelocity();
+	void setVelocity(glm::vec3 vel);
+	glm::vec3 getAcceleration();
 
 };
 

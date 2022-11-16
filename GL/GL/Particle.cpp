@@ -11,6 +11,11 @@ glm::vec3 Particle::getPosition()
 	return position;
 }
 
+void Particle::setPosition(glm::vec3 pos)
+{
+	this->position = pos;
+}
+
 
 // Sets the position, scale, and rotation to the Particle class
 void Particle::initVariables(glm::vec3 pos, glm::vec3 size, glm::vec3 rot, int type) {
@@ -128,4 +133,19 @@ void Particle::clearAccum()
 void Particle::addForce(const glm::vec3& force)
 {
 	forceAccum += force;
+}
+
+glm::vec3 Particle::getVelocity()
+{
+	return velocity;
+}
+
+void Particle::setVelocity(glm::vec3 vel)
+{
+	this->velocity = vel;
+}
+
+glm::vec3 Particle::getAcceleration()
+{
+	return acceleration;
 }

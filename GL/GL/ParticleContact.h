@@ -6,8 +6,8 @@ public:
 	Particle *particle[2];
 
 	float restitution;
-
 	glm::vec3 contactNormal;
+	float penetration;
 
 	void resolve(float duration);
 	glm::vec3 calculateSeparatingVelocity() const;
@@ -16,7 +16,6 @@ public:
 private:
 	void resolveVelocity(float duration);
 
-	float penetration;
 	void resolveInterpenetration(float duration);
 };
 

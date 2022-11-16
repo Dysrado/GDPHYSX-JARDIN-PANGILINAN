@@ -11,6 +11,7 @@
 #include "ParticleSpring.h"
 #include "ParticleAnchoredSpring.h"
 #include "ParticleBungee.h"
+#include "ParticleWorld.h"
 
 
 int main(void)
@@ -203,13 +204,16 @@ int main(void)
     //springType spring = NONE;
 
     /* ======================= Force Values ======================= */
-    ParticleForceRegistry springReg;
-    ParticleGravity* pg = new ParticleGravity(glm::vec3(0,-20,0));
+    //ParticleForceRegistry springReg;
+    //ParticleGravity* pg = new ParticleGravity(glm::vec3(0,-20,0));
 
+    const static unsigned maxContacts = 256;
+    ParticleWorld world(maxContacts);
 
     /* Loop until the user closes the window or user presses the Escape key*/
     while (!glfwWindowShouldClose(window))
     {
+        world.startFrame();
         /* Current Time */
         GLfloat currTime = glfwGetTime();
 
@@ -217,6 +221,7 @@ int main(void)
         float deltaTime = currTime - lastTime;
         float cooldownTimer = glfwGetTime(); // used for cooldown
         totalDuration += deltaTime;
+
 
         /* Keyboard Input */
         if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) { // swaps to ARTILLERY
@@ -254,8 +259,14 @@ int main(void)
                     Particle* temp2 = new Particle();
                     temp2->initVariables(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType); // instantiates a particle depenting on projectileType
                     temp2->init();
-                    particleList.push_back(temp2);
-                    springReg.add(particleList[particleList.size() - 1], pg);
+                    
+                    while (world.firstParticle->next != nullptr) {
+                        world.firstParticle = world.firstParticle->next;
+                    }
+                    world.firstParticle->particle = temp2;
+                    world.firstParticle->next = nullptr;
+                    //particleList.push_back(temp2);
+                    //springReg.add(particleList[particleList.size() - 1], pg);
                 }
 
                 //if (spring == BASIC) { // adds the particle Basic Spring
@@ -289,12 +300,12 @@ int main(void)
             }
         }
         
-        springReg.updateForces(deltaTime);
+        //springReg.updateForces(deltaTime);
 
-        // integrates all of the particle in their lists
-        for (int i = 0; i < particleList.size(); i++) {
-            particleList[i]->integrate(deltaTime);
-        }
+        //// integrates all of the particle in their lists
+        //for (int i = 0; i < particleList.size(); i++) {
+        //    particleList[i]->integrate(deltaTime);
+        //}
 
         box->integrate(deltaTime);
 
@@ -322,12 +333,19 @@ int main(void)
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
 
-        // Renders the vector of Particles
-        for (int i = 0; i < particleList.size(); i++) {
-            particleList[i]->render(shaderProgram);
+        //// Renders the vector of Particles
+        //for (int i = 0; i < particleList.size(); i++) {
+        //    particleList[i]->render(shaderProgram);
+        //}
+
+        while (world.firstParticle->next != nullptr) {
+            world.firstParticle->particle->render(shaderProgram);
+            world.firstParticle = world.firstParticle->next;
         }
 
         box->render(shaderProgram);
+
+        world.runPhysics(deltaTime);
 
         lastTime = currTime;
     }

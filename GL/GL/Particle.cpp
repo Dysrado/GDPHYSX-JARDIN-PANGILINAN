@@ -137,7 +137,7 @@ void Particle::addForce(const glm::vec3& force)
 
 glm::vec3 Particle::getVelocity()
 {
-	return velocity;
+	return this->velocity;
 }
 
 void Particle::setVelocity(glm::vec3 vel)

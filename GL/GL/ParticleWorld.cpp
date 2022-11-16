@@ -4,7 +4,8 @@ ParticleWorld::ParticleWorld(unsigned maxContacts, unsigned iterations):resolver
 {
 	contacts = new ParticleContact[maxContacts];
 	calculateIterations = (iterations == 0);
-	
+	firstParticle = new ParticleRegistration();
+	firstParticle->next = nullptr;
 }
 
 void ParticleWorld::startFrame()

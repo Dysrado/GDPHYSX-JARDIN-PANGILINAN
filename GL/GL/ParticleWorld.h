@@ -10,7 +10,6 @@ class ParticleWorld
 		Particle* particle;
 		ParticleRegistration* next;
 	};
-	ParticleRegistration* firstParticle;
 	ParticleForceRegistry registry;
 	ParticleContactResolver resolver;
 
@@ -25,6 +24,7 @@ class ParticleWorld
 	unsigned maxContacts;
 
 public:
+	ParticleRegistration* firstParticle;
 	ParticleWorld(unsigned maxContacts, unsigned iterations = 0);
 	void startFrame();
 	unsigned generateContacts();

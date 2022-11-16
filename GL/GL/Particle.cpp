@@ -18,11 +18,16 @@ void Particle::initVariables(glm::vec3 pos, glm::vec3 size, glm::vec3 rot, int t
 	// Sets the Particle's location, scale and rotation to the parameters location, scale and rotation
 	switch (type) {
 		case 1://When the particle selected is Artillery Ammo
-			this->velocity = glm::vec3(0,30.0f, 40.0f);
+			this->velocity = glm::vec3(0, 0, 35.0f);
 			this->inverseMass = 1.0f;
 			//this->acceleration = glm::vec3(0, -20.0f, 0);
 			this->damping = 0.99f;
 			break;	
+		case 2:
+			this->velocity = glm::vec3(0, 0, 0);
+			this->inverseMass = 1.0f;
+			//this->acceleration = glm::vec3(0, -20.0f, 0);
+			this->damping = 0.99f;
 	}
 	
 	this->position = pos;
@@ -86,6 +91,7 @@ void Particle::integrate(float duration)
 		//velocity += acceleration * duration; //Updates the velocity of the particle based on acceleration
 		velocity *= pow(damping, duration); //Applies damping to the velocity
 		transform = glm::translate(glm::mat4(1.0f), position); //Appliess linear transformation to the particle
+		transform = glm::scale(transform, this->scale);
 		clearAccum();
 	}
 	

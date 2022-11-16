@@ -172,6 +172,10 @@ int main(void)
     glm::mat4 view = cameraOrientation * cameraPositionMatrix;
 
     // Initialize Particle as object
+    Particle* box = new Particle();
+    box->initVariables(glm::vec3(0, 0, 5), glm::vec3(3, 3, 3), glm::vec3(0, 0, 0), 2);
+    box->init();
+
     std::vector<Particle*> particleList;
 
     // Used for deltaTime computation
@@ -188,21 +192,19 @@ int main(void)
         FIREWORK
     };
 
-    enum springType {
+    /*enum springType {
         NONE = 0,
         BASIC,
         ANCHORED,
         BUNGEE
-    };
+    };*/
 
     type projectileType = ARTILLERY;
-    springType spring = NONE;
+    //springType spring = NONE;
 
     /* ======================= Force Values ======================= */
     ParticleForceRegistry springReg;
     ParticleGravity* pg = new ParticleGravity(glm::vec3(0,-20,0));
-
-    
 
 
     /* Loop until the user closes the window or user presses the Escape key*/
@@ -219,36 +221,36 @@ int main(void)
         /* Keyboard Input */
         if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) { // swaps to ARTILLERY
             projectileType = ARTILLERY;
-            spring = NONE;
-            std::cout << "Currently set to Artillery Ammo\n";
+            //spring = NONE;
+            //std::cout << "Currently set to Artillery Ammo\n";
 
         }
-        else if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS) { // swaps to Basic Spring
-            projectileType = ARTILLERY;
-            spring = BASIC;
-            std::cout << "Currently set to Basic Spring\n";
-        }
-        else if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS) { // swaps to Anchored Spring
-            projectileType = ARTILLERY;
-            spring = ANCHORED;
-            std::cout << "Currently set to Anchored Spring\n";
-        }
-        else if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS) { // swaps to Bungee Spring
-            projectileType = ARTILLERY;
-            spring = BUNGEE;
-            std::cout << "Currently set to Bungee Spring\n";
-        }
+        //else if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS) { // swaps to Basic Spring
+        //    projectileType = ARTILLERY;
+        //    spring = BASIC;
+        //    std::cout << "Currently set to Basic Spring\n";
+        //}
+        //else if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS) { // swaps to Anchored Spring
+        //    projectileType = ARTILLERY;
+        //    spring = ANCHORED;
+        //    std::cout << "Currently set to Anchored Spring\n";
+        //}
+        //else if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS) { // swaps to Bungee Spring
+        //    projectileType = ARTILLERY;
+        //    spring = BUNGEE;
+        //    std::cout << "Currently set to Bungee Spring\n";
+        //}
 
         if (cooldownTimer > lastCDTime + 1) { // cooldown, every 1 second
             if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) { // on mouse button
                 lastCDTime = glfwGetTime();
-                Particle* a = new Particle();
+  /*              Particle* a = new Particle();
                 Particle* b = new Particle();
                 b->initVariables(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType);
-                b->init();
+                b->init();*/
                 
 
-                if (projectileType == ARTILLERY && spring == NONE) { // adds the particle artillery
+                if (projectileType == ARTILLERY /* && spring == NONE*/) { // adds the particle artillery
                     Particle* temp2 = new Particle();
                     temp2->initVariables(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType); // instantiates a particle depenting on projectileType
                     temp2->init();
@@ -256,33 +258,33 @@ int main(void)
                     springReg.add(particleList[particleList.size() - 1], pg);
                 }
 
-                if (spring == BASIC) { // adds the particle Basic Spring
-                    a->initVariables(glm::vec3(0, -5, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType);
-                    a->init();
-                    
-                    ParticleSpring* ps = new ParticleSpring(b, 1.f, 2.f);
-                    springReg.add(a, ps);
-                    particleList.push_back(a);
-                    particleList.push_back(b);
-                }
-                else if(spring == ANCHORED) // adds the particle Anchored Spring
-                {
-                    a->initVariables(glm::vec3(0, -3, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType);
-                    a->init();
+                //if (spring == BASIC) { // adds the particle Basic Spring
+                //    a->initVariables(glm::vec3(0, -5, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType);
+                //    a->init();
+                //    
+                //    ParticleSpring* ps = new ParticleSpring(b, 1.f, 2.f);
+                //    springReg.add(a, ps);
+                //    particleList.push_back(a);
+                //    particleList.push_back(b);
+                //}
+                //else if(spring == ANCHORED) // adds the particle Anchored Spring
+                //{
+                //    a->initVariables(glm::vec3(0, -3, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType);
+                //    a->init();
 
-                    ParticleAnchoredSpring* pAs = new ParticleAnchoredSpring(&cameraPos, 1.f, 2.f);
-                    springReg.add(a, pAs);
-                    particleList.push_back(a);
-                }
-                else if (spring == BUNGEE) { // adds the particle Bungee Spring
-                    a->initVariables(glm::vec3(0, -5, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType);
-                    a->init();
+                //    ParticleAnchoredSpring* pAs = new ParticleAnchoredSpring(&cameraPos, 1.f, 2.f);
+                //    springReg.add(a, pAs);
+                //    particleList.push_back(a);
+                //}
+                //else if (spring == BUNGEE) { // adds the particle Bungee Spring
+                //    a->initVariables(glm::vec3(0, -5, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType);
+                //    a->init();
 
-                    ParticleBungee* ps = new ParticleBungee(b, 1.f, 2.f);
-                    springReg.add(a, ps);
-                    particleList.push_back(a);
-                    particleList.push_back(b);
-                }
+                //    ParticleBungee* ps = new ParticleBungee(b, 1.f, 2.f);
+                //    springReg.add(a, ps);
+                //    particleList.push_back(a);
+                //    particleList.push_back(b);
+                //}
                 
             }
         }
@@ -294,6 +296,7 @@ int main(void)
             particleList[i]->integrate(deltaTime);
         }
 
+        box->integrate(deltaTime);
 
         // Updates the Uniforms
         unsigned int projectionLoc = glGetUniformLocation(shaderProgram, "projection");
@@ -324,6 +327,8 @@ int main(void)
             particleList[i]->render(shaderProgram);
         }
 
+        box->render(shaderProgram);
+
         lastTime = currTime;
     }
 
@@ -337,6 +342,7 @@ int main(void)
         particleList[i]->deleteVertex();
     }
 
+    box->deleteVertex();
 
     glfwTerminate();
     return 0;

@@ -9,11 +9,9 @@ public:
 
 	glm::vec3 contactNormal;
 
-
-protected:
 	void resolve(float duration);
-
 	glm::vec3 calculateSeparatingVelocity() const;
+
 
 private:
 	void resolveVelocity(float duration);

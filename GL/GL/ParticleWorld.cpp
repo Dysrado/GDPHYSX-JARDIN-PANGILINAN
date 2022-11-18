@@ -8,10 +8,15 @@ ParticleWorld::ParticleWorld(unsigned maxContacts, unsigned iterations):resolver
 
 void ParticleWorld::startFrame()
 {
-	ParticleRegistration* reg = firstParticle;
+	// Edited =============================================================
+	/*ParticleRegistration* reg = firstParticle;
 	while (reg) {
 		reg->particle->clearAccum();
 		reg = reg->next;
+	}*/
+
+	for (int i = 0; i < firstParticle.size(); i++) {
+		firstParticle[i]->particle->clearAccum();
 	}
 }
 
@@ -32,10 +37,14 @@ unsigned ParticleWorld::generateContacts()
 }
 
 void ParticleWorld::integrate(float duration) {
-	ParticleRegistration* reg = firstParticle;
+	// Edited =============================================================
+	/*ParticleRegistration* reg = firstParticle;
 	while (reg) {
 		reg->particle->integrate(duration);
 		reg = reg->next;
+	}*/
+	for (int i = 0; i < firstParticle.size(); i++) {
+		firstParticle[i]->particle->integrate(duration);
 	}
 }
 
@@ -49,7 +58,8 @@ void ParticleWorld::runPhysics(float duration) {
 
 void ParticleWorld::push_back(Particle* particle)
 {
-	ParticleRegistration* temp = new ParticleRegistration();
+	// Edited =============================================================
+	/*ParticleRegistration* temp = new ParticleRegistration();
 	temp->particle = particle;
 	temp->next = NULL;
 
@@ -63,5 +73,23 @@ void ParticleWorld::push_back(Particle* particle)
 		}
 		traverse->next = temp;
 
+	}*/
+	ParticleRegistration* temp = new ParticleRegistration();
+	temp->particle = particle;
+
+	firstParticle.push_back(temp);
+}
+
+void ParticleWorld::render(GLuint shaderProgram)
+{
+	// Edited =============================================================
+	/*ParticleRegistration* temp = firstParticle;
+	if (temp != NULL) {
+		temp->particle->render(shaderProgram);
+	}*/
+	
+	for (int i = 0; i < firstParticle.size(); i++) {
+		firstParticle[i]->particle->render(shaderProgram);
 	}
+
 }

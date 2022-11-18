@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include "Particle.h"
 #include "ParticleForceRegistry.h"
 #include "ParticleContactResolver.h"
@@ -23,7 +24,9 @@ class ParticleWorld
 	unsigned maxContacts;
 
 public:
-	ParticleRegistration* firstParticle;
+	std::vector<ParticleRegistration*> firstParticle;
+	// Edited =============================================================
+	//ParticleRegistration* firstParticle;
 	ParticleForceRegistry registry;
 	ParticleWorld(unsigned maxContacts, unsigned iterations = 0);
 	void startFrame();
@@ -32,6 +35,7 @@ public:
 	void runPhysics(float duration);
 
 	void push_back(Particle *particle);
+	void render(GLuint shaderProgram);
 
 };
 

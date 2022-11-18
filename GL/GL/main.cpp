@@ -177,7 +177,7 @@ int main(void)
     box->initVariables(glm::vec3(0, 0, 5), glm::vec3(3, 3, 3), glm::vec3(0, 0, 0), 2);
     box->init();
 
-    std::vector<Particle*> particleList;
+    //std::vector<Particle*> particleList;
 
     // Used for deltaTime computation
     float lastTime = glfwGetTime();
@@ -262,12 +262,12 @@ int main(void)
                     temp2->init();
                     
                     world.push_back(temp2);
-                    //particleList.push_back(temp2);
-                    //springReg.add(particleList[particleList.size() - 1], pg);
-                    while (world.firstParticle->next != NULL) {
+                    // Edited =============================================================
+                    /*while (world.firstParticle->next != NULL) {
                         world.firstParticle = world.firstParticle->next;
-                    }
-                    world.registry.add(world.firstParticle->particle, pg);
+                    }*/
+                    world.registry.add(temp2, pg);
+                    //world.registry.add(world.firstParticle->particle, pg);
                 }
 
                 //if (spring == BASIC) { // adds the particle Basic Spring
@@ -339,15 +339,16 @@ int main(void)
         //    particleList[i]->render(shaderProgram);
         //}
 
-        while (world.firstParticle != NULL) {
-            world.firstParticle->particle->render(shaderProgram);
+        /*while (world.firstParticle != NULL) {
+            
             world.firstParticle = world.firstParticle->next;
-        }
+        }*/
+        world.render(shaderProgram);
+
 
         //box->render(shaderProgram);
 
         world.runPhysics(deltaTime);
-
         lastTime = currTime;
     }
 

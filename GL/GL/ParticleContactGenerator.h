@@ -4,7 +4,7 @@
 class ParticleContactGenerator
 {
 public:
-	unsigned addContact(ParticleContact* contact, unsigned limit) const;
+	virtual unsigned addContact(ParticleContact* contact, unsigned limit) const = 0;
 
 };
 

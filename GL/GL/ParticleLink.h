@@ -4,10 +4,10 @@
 class ParticleLink
 {
 public:
-	Particle* paricle[2];
+	Particle* particle[2];
 
 protected:
-	float currentLenth() const;
+	float currentLength() const;
 
 public:
 	virtual unsigned fillContact(ParticleContact* contact, unsigned limit) const = 0;

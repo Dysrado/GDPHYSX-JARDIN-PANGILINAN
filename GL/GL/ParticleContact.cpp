@@ -6,13 +6,14 @@ void ParticleContact::resolve(float duration)
 	resolveInterpenetration(duration);
 }
 
-glm::vec3 ParticleContact::calculateSeparatingVelocity() const
+glm::vec3 ParticleContact::calculateSeparatingVelocity()
 {
 	glm::vec3 relativeVelocity = particle[0]->getVelocity();
 	if (particle[1]) {
 		relativeVelocity -= particle[1]->getVelocity();
-		return relativeVelocity * contactNormal;
+		
 	}
+	return relativeVelocity * contactNormal;
 }
 
 void ParticleContact::resolveVelocity(float duration)

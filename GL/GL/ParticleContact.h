@@ -10,7 +10,7 @@ public:
 	float penetration;
 
 	void resolve(float duration);
-	glm::vec3 calculateSeparatingVelocity() const;
+	glm::vec3 calculateSeparatingVelocity();
 
 
 private:

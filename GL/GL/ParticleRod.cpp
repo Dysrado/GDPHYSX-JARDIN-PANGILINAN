@@ -1,5 +1,11 @@
 #include "ParticleRod.h"
 
+float ParticleRod::currentLength() const
+{
+    glm::vec3 relativePos = particle[0]->getPosition() - particle[1]->getPosition();
+    return relativePos.length();
+}
+
 unsigned ParticleRod::fillContact(ParticleContact* contact, unsigned limit) const
 {
     float currentLen = currentLength();

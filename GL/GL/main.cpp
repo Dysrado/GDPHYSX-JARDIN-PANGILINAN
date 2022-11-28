@@ -12,6 +12,7 @@
 #include "ParticleAnchoredSpring.h"
 #include "ParticleBungee.h"
 #include "ParticleWorld.h"
+#include "MassAggregateCube.h"
 
 
 int main(void)
@@ -173,9 +174,11 @@ int main(void)
     glm::mat4 view = cameraOrientation * cameraPositionMatrix;
 
     // Initialize Particle as object
-    Particle* box = new Particle();
+   /* Particle* box = new Particle();
     box->initVariables(glm::vec3(0, 0, 5), glm::vec3(3, 3, 3), glm::vec3(0, 0, 0), 2);
-    box->init();
+    box->init();*/
+    MassAggregateCube* Cube = new MassAggregateCube();
+
 
     //std::vector<Particle*> particleList;
 
@@ -209,8 +212,9 @@ int main(void)
 
     const static unsigned maxContacts = 256;
     ParticleWorld world(maxContacts);
+    Cube->pushToWorld(world);
 
-    world.push_back(box);
+    //world.push_back(box);
     /* Loop until the user closes the window or user presses the Escape key*/
     while (!glfwWindowShouldClose(window))
     {

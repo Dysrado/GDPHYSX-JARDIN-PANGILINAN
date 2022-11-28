@@ -1,14 +1,17 @@
 #pragma once
-#include "ParticleRod.h"
+
 #include "Particle.h"
 #include "ParticleWorld.h"
+#include "ParticleLink.h"
+
+
 class MassAggregateCube
 {
-	Particle* particleArray[8];
-	ParticleRod* rods[12];
+	Particle* particleArray;
+	ParticleRod* rods;
 
 	public:
-		MassAggregateCube();
+		MassAggregateCube(ParticleWorld* world);
 		void pushToWorld(ParticleWorld* world);
 
 

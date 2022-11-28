@@ -177,7 +177,6 @@ int main(void)
    /* Particle* box = new Particle();
     box->initVariables(glm::vec3(0, 0, 5), glm::vec3(3, 3, 3), glm::vec3(0, 0, 0), 2);
     box->init();*/
-    MassAggregateCube* Cube = new MassAggregateCube();
 
 
     //std::vector<Particle*> particleList;
@@ -212,11 +211,19 @@ int main(void)
 
     const static unsigned maxContacts = 256;
     ParticleWorld world(maxContacts);
+    MassAggregateCube* Cube = new MassAggregateCube(&world);
     Cube->pushToWorld(&world);
+
+    Particle* array;
+    array = new Particle[3];
+    array[0] = Particle();
+    array[0].initVariables(glm::vec3(-3, 0, 5), glm::vec3(1,1,1), glm::vec3(0, 0, 0), 2); //F1
+    array[0].init();
 
     //world.push_back(box);
     /* Loop until the user closes the window or user presses the Escape key*/
     while (!glfwWindowShouldClose(window))
+    
     {
         world.startFrame();
         /* Current Time */
@@ -250,7 +257,7 @@ int main(void)
         //    spring = BUNGEE;
         //    std::cout << "Currently set to Bungee Spring\n";
         //}
-
+       // world.particles.push_back(&array[0]);
         if (cooldownTimer > lastCDTime + 1) { // cooldown, every 1 second
             if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) { // on mouse button
                 lastCDTime = glfwGetTime();
@@ -264,13 +271,14 @@ int main(void)
                     Particle* temp2 = new Particle();
                     temp2->initVariables(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType); // instantiates a particle depenting on projectileType
                     temp2->init();
-                    
-                    world.push_back(temp2);
+                    world.particles.push_back(temp2);
+                   // world.push_back(temp2);
                     // Edited =============================================================
                     /*while (world.firstParticle->next != NULL) {
                         world.firstParticle = world.firstParticle->next;
                     }*/
                     world.registry.add(temp2, pg);
+                    
                     //world.registry.add(world.firstParticle->particle, pg);
                 }
 

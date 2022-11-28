@@ -26,7 +26,9 @@ void ParticleContact::resolveVelocity(float duration)
 
 	glm::vec3 newSepVelocity = -separatingVelocity * restitution;
 
-	// not sure if forceAccum or Acceleration
+	
+
+	// not sure if forceAccum or Acceleration 
 	glm::vec3 accCausedVelocity = particle[0]->getAcceleration();
 	if (particle[1]) {
 		accCausedVelocity -= particle[1]->getAcceleration();
@@ -62,6 +64,8 @@ void ParticleContact::resolveVelocity(float duration)
 	if (particle[1]) {
 		particle[1]->setVelocity(particle[1]->getVelocity() + impulsePerIMass * -particle[1]->getMass());
 	}
+
+
 }
 
 void ParticleContact::resolveInterpenetration(float duration)
@@ -82,9 +86,41 @@ void ParticleContact::resolveInterpenetration(float duration)
 
 	glm::vec3 movePerIMass = contactNormal * (penetration / totalInverseMass);
 
-	particle[0]->setPosition(particle[0]->getPosition() + movePerIMass * particle[0]->getMass());
+	particle[0]->setPosition(particle[0]->getPosition() + (movePerIMass * particle[0]->getMass()));
 
 	if (particle[1]) {
-		particle[1]->setPosition(particle[1]->getPosition() + movePerIMass * particle[1]->getMass());
+		particle[1]->setPosition(particle[1]->getPosition() + (movePerIMass * particle[1]->getMass()));
 	}
+	
+}
+
+void ParticleContactResolver::resolveContacts(ParticleContact* contactArray, unsigned numContacts, float duration)
+{
+	unsigned i;
+	iterationsUsed = 0;
+	while (iterationsUsed < iterations) {
+		glm::vec3 max(0);
+		unsigned maxIndex = numContacts;
+		for (unsigned i = 0; i < numContacts; i++) {
+			glm::vec3 sepVel = contactArray[i].calculateSeparatingVelocity();
+
+			if (sepVel.x < max.x && sepVel.y < max.y && sepVel.z < max.z) {
+				max = sepVel;
+				maxIndex = i;
+			}
+		}
+
+		contactArray[maxIndex].resolve(duration);
+		iterationsUsed++;
+	}
+}
+
+void ParticleContactResolver::setIterations(unsigned iterations)
+{
+	ParticleContactResolver::iterations = iterations;
+}
+
+
+ParticleContactResolver::ParticleContactResolver(unsigned iterations):iterations(iterations)
+{
 }

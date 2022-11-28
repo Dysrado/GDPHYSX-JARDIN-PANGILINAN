@@ -23,6 +23,13 @@ void ParticleWorld::startFrame()
 	//}
 }
 
+ParticleWorld::ContactGenerators& ParticleWorld::getContactGenerator()
+{
+	return contactGenerators;
+}
+
+
+
 unsigned ParticleWorld::generateContacts()
 {
 	unsigned limit = maxContacts;
@@ -56,19 +63,19 @@ void ParticleWorld::runPhysics(float duration) {
 	registry.updateForces(duration);
 	integrate(duration);
 	unsigned usedContacts = generateContacts();
-	if (calculateIterations) resolver.setIterations(usedContacts * 2); //IDK WHAT THIS DOES
-	resolver.resolveContacts(contacts, usedContacts, duration);
+	if (usedContacts) {
+		if (calculateIterations) resolver.setIterations(usedContacts * 2); 
+		resolver.resolveContacts(contacts, usedContacts, duration);
+	}
+
+	
 }
 
-//ContactGenRegistration ParticleWorld::getContactGenerator()
+
+//void ParticleWorld::push_back(Particle* particle)
 //{
-//	return firstContactGen;
+//	particles.push_back(particle);
 //}
-
-void ParticleWorld::push_back(Particle* particle)
-{
-	particles.push_back(particle);
-}
 
 
 void ParticleWorld::render(GLuint shaderProgram)

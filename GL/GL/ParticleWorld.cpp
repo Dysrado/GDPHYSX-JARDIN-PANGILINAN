@@ -56,6 +56,11 @@ void ParticleWorld::runPhysics(float duration) {
 	resolver.resolveContacts(contacts, usedContacts, duration);
 }
 
+ContactGenRegistration ParticleWorld::getContactGenerator()
+{
+	return firstContactGen;
+}
+
 void ParticleWorld::push_back(Particle* particle)
 {
 	// Edited =============================================================

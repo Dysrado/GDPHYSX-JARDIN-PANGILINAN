@@ -33,7 +33,7 @@ public:
 	unsigned generateContacts();
 	void integrate(float duration);
 	void runPhysics(float duration);
-
+	ContactGenRegistration* getContactGenerator();
 	void push_back(Particle *particle);
 	void push_back_contact(ParticleContactGenerator *contactGen);
 	void render(GLuint shaderProgram);

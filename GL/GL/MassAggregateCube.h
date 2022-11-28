@@ -5,7 +5,7 @@
 class MassAggregateCube
 {
 	Particle* particleArray[8];
-	//ParticleRod* rods[12];
+	ParticleRod* rods[12];
 
 	public:
 		MassAggregateCube();

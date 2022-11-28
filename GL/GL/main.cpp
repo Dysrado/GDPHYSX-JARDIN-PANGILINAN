@@ -212,7 +212,7 @@ int main(void)
 
     const static unsigned maxContacts = 256;
     ParticleWorld world(maxContacts);
-    Cube->pushToWorld(world);
+    Cube->pushToWorld(&world);
 
     //world.push_back(box);
     /* Loop until the user closes the window or user presses the Escape key*/

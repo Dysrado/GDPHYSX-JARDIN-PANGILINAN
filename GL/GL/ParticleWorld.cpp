@@ -80,6 +80,10 @@ void ParticleWorld::push_back(Particle* particle)
 	firstParticle.push_back(temp);
 }
 
+void ParticleWorld::push_back_contact(ParticleContactGenerator* contactGen)
+{
+}
+
 void ParticleWorld::render(GLuint shaderProgram)
 {
 	// Edited =============================================================

@@ -35,6 +35,7 @@ public:
 	void runPhysics(float duration);
 
 	void push_back(Particle *particle);
+	void push_back_contact(ParticleContactGenerator *contactGen);
 	void render(GLuint shaderProgram);
 
 };

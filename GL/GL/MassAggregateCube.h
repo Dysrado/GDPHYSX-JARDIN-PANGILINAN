@@ -9,7 +9,7 @@ class MassAggregateCube
 
 	public:
 		MassAggregateCube();
-		void pushToWorld(ParticleWorld world);
+		void pushToWorld(ParticleWorld* world);
 
 
 	

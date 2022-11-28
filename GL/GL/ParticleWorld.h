@@ -7,35 +7,27 @@
 
 class ParticleWorld
 {
-	struct ParticleRegistration {
-		Particle* particle;
-		ParticleRegistration* next;
-	};
 	ParticleContactResolver resolver;
 
-	struct ContactGenRegistration {
-		ParticleContactGenerator *gen;
-		ContactGenRegistration*next;
-	};
-	ContactGenRegistration* firstContactGen;
+	typedef std::vector<ParticleContactGenerator*> ContactGenerators;
+
+	ContactGenerators contactGenerators;
 
 	ParticleContact* contacts;
 	bool calculateIterations;
 	unsigned maxContacts;
 
 public:
-	std::vector<ParticleRegistration*> firstParticle;
-	// Edited =============================================================
-	//ParticleRegistration* firstParticle;
+	typedef std::vector<Particle*> Particles;
+	Particles particles;
 	ParticleForceRegistry registry;
 	ParticleWorld(unsigned maxContacts, unsigned iterations = 0);
 	void startFrame();
 	unsigned generateContacts();
 	void integrate(float duration);
 	void runPhysics(float duration);
-	ContactGenRegistration* getContactGenerator();
+	//ContactGenRegistration* getContactGenerator();
 	void push_back(Particle *particle);
-	void push_back_contact(ParticleContactGenerator *contactGen);
 	void render(GLuint shaderProgram);
 
 };

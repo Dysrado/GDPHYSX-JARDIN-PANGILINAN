@@ -212,13 +212,13 @@ int main(void)
     const static unsigned maxContacts = 256;
     ParticleWorld world(maxContacts);
     MassAggregateCube* Cube = new MassAggregateCube(&world);
-    Cube->pushToWorld(&world);
+    //Cube->pushToWorld(&world);
 
-    Particle* array;
-    array = new Particle[3];
-    array[0] = Particle();
-    array[0].initVariables(glm::vec3(-3, 0, 5), glm::vec3(1,1,1), glm::vec3(0, 0, 0), 2); //F1
-    array[0].init();
+    //Particle* array;
+    //array = new Particle[3];
+    //array[0] = Particle();
+    //array[0].initVariables(glm::vec3(-3, 0, 5), glm::vec3(1,1,1), glm::vec3(0, 0, 0), 2); //F1
+    //array[0].init();
 
     //world.push_back(box);
     /* Loop until the user closes the window or user presses the Escape key*/
@@ -271,6 +271,7 @@ int main(void)
                     Particle* temp2 = new Particle();
                     temp2->initVariables(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType); // instantiates a particle depenting on projectileType
                     temp2->init();
+
                     world.particles.push_back(temp2);
                    // world.push_back(temp2);
                     // Edited =============================================================

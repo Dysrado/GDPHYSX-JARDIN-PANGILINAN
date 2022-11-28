@@ -93,7 +93,8 @@ MassAggregateCube::MassAggregateCube(ParticleWorld* world)
 	
 	for (int i = 0; i < 8; i++) {
 		//particleArray[i] = Particle();
-		//world->particles.push_back(particleArray[i]);
+		std::cout << "Particle Array A " << &particleArray[i] << std::endl;
+		world->particles.push_back(&particleArray[i]);
 		//world->push_back(&particleArray[i]);
 	}
 	//world->particles.push_back(&particleArray[0]);

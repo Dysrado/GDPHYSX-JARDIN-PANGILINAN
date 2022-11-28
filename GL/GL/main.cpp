@@ -150,7 +150,7 @@ int main(void)
     glm::vec3 cameraPos = glm::vec3(-2 , 0, -10.f);
 
     glm::mat4 cameraPositionMatrix = glm::translate(glm::mat4(1.f), cameraPos * -1.f);
-    cameraPositionMatrix = glm::rotate(cameraPositionMatrix, 100.0f, glm::vec3(0,1,0));
+   // cameraPositionMatrix = glm::rotate(cameraPositionMatrix, 100.0f, glm::vec3(0,1,0));
     
     glm::vec3 WorldUp = glm::vec3(0, 1.f, 0);
     glm::vec3 center = glm::vec3(0, 3.f, 0);
@@ -202,12 +202,14 @@ int main(void)
         BUNGEE
     };*/
 
+
+
     type projectileType = ARTILLERY;
     //springType spring = NONE;
 
     /* ======================= Force Values ======================= */
     //ParticleForceRegistry springReg;
-    ParticleGravity* pg = new ParticleGravity(glm::vec3(0,-20,0));
+ //   ParticleGravity* pg = new ParticleGravity(glm::vec3(0,-20,0));
 
     const static unsigned maxContacts = 256;
     ParticleWorld world(maxContacts);
@@ -215,11 +217,11 @@ int main(void)
     //Cube->pushToWorld(&world);
 
     //Particle* array;
-    //array = new Particle[3];
+    //array = new Particle[1];
     //array[0] = Particle();
     //array[0].initVariables(glm::vec3(-3, 0, 5), glm::vec3(1,1,1), glm::vec3(0, 0, 0), 2); //F1
     //array[0].init();
-
+    //world.particles.push_back(&array[0]);
     //world.push_back(box);
     /* Loop until the user closes the window or user presses the Escape key*/
     while (!glfwWindowShouldClose(window))
@@ -278,50 +280,16 @@ int main(void)
                     /*while (world.firstParticle->next != NULL) {
                         world.firstParticle = world.firstParticle->next;
                     }*/
-                    world.registry.add(temp2, pg);
+                  //  world.registry.add(temp2, pg);
                     
-                    //world.registry.add(world.firstParticle->particle, pg);
                 }
 
-                //if (spring == BASIC) { // adds the particle Basic Spring
-                //    a->initVariables(glm::vec3(0, -5, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType);
-                //    a->init();
-                //    
-                //    ParticleSpring* ps = new ParticleSpring(b, 1.f, 2.f);
-                //    springReg.add(a, ps);
-                //    particleList.push_back(a);
-                //    particleList.push_back(b);
-                //}
-                //else if(spring == ANCHORED) // adds the particle Anchored Spring
-                //{
-                //    a->initVariables(glm::vec3(0, -3, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType);
-                //    a->init();
-
-                //    ParticleAnchoredSpring* pAs = new ParticleAnchoredSpring(&cameraPos, 1.f, 2.f);
-                //    springReg.add(a, pAs);
-                //    particleList.push_back(a);
-                //}
-                //else if (spring == BUNGEE) { // adds the particle Bungee Spring
-                //    a->initVariables(glm::vec3(0, -5, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType);
-                //    a->init();
-
-                //    ParticleBungee* ps = new ParticleBungee(b, 1.f, 2.f);
-                //    springReg.add(a, ps);
-                //    particleList.push_back(a);
-                //    particleList.push_back(b);
-                //}
+               
                 
             }
         }
         
-        //springReg.updateForces(deltaTime);
-
-        //// integrates all of the particle in their lists
-        //for (int i = 0; i < particleList.size(); i++) {
-        //    particleList[i]->integrate(deltaTime);
-        //}
-
-        //box->integrate(deltaTime);
+        
 
         // Updates the Uniforms
         unsigned int projectionLoc = glGetUniformLocation(shaderProgram, "projection");
@@ -356,8 +324,8 @@ int main(void)
             
             world.firstParticle = world.firstParticle->next;
         }*/
-        world.render(shaderProgram);
 
+        world.render(shaderProgram);
 
         //box->render(shaderProgram);
 

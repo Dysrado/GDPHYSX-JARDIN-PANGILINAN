@@ -1,13 +1,11 @@
 ﻿  main.cpp
-D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(36,23): warning C4018: '<': signed/unsigned mismatch
-D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(70,38): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(70,31): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(178,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(180,22): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(212,26): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
-D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(216,29): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(244,41): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(293,27): warning C4018: '<': signed/unsigned mismatch
-D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(323,27): warning C4018: '<': signed/unsigned mismatch
-D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(336,23): warning C4018: '<': signed/unsigned mismatch
-  GL.vcxproj -> D:\School Files\7th Term\GDPHYX\HW1 - Particle Motion\GDPHYSX-JARDIN-PANGILINAN\GL\Debug\GL.exe
+C:\Users\DysComfy\Saved Games\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(38,23): warning C4018: '<': signed/unsigned mismatch
+C:\Users\DysComfy\Saved Games\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(72,38): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\DysComfy\Saved Games\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(72,31): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\DysComfy\Saved Games\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(185,20): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\DysComfy\Saved Games\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(187,22): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\DysComfy\Saved Games\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(232,26): warning C4244: 'initializing': conversion from 'double' to 'GLfloat', possible loss of data
+C:\Users\DysComfy\Saved Games\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(236,29): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\DysComfy\Saved Games\GDPHYSX-JARDIN-PANGILINAN\GL\GL\main.cpp(265,41): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+  GL.vcxproj -> C:\Users\DysComfy\Saved Games\GDPHYSX-JARDIN-PANGILINAN\GL\Debug\GL.exe

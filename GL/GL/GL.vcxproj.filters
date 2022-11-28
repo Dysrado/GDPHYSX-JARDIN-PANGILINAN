@@ -24,9 +24,6 @@
     <ClCompile Include="Particle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Firework.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ParticleForceRegistry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -36,10 +33,16 @@
     <ClCompile Include="ParticleSpring.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleAnchoredSpring.cpp">
+    <ClCompile Include="ParticleContact.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ParticleBungee.cpp">
+    <ClCompile Include="ParticleWorld.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleLink.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MassAggregateCube.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -48,12 +51,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Particle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Firework.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticleForceGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ParticleForceRegistry.h">
@@ -65,10 +62,19 @@
     <ClInclude Include="ParticleSpring.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleAnchoredSpring.h">
+    <ClInclude Include="ParticleContact.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleBungee.h">
+    <ClInclude Include="ParticleWorld.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleLink.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MassAggregateCube.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleForceGenerator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

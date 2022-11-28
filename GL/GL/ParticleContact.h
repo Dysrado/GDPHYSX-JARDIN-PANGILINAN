@@ -10,6 +10,8 @@ public:
 	glm::vec3 contactNormal;
 	float penetration;
 
+	glm::vec3 particleMovement[2];
+
 protected:
 	void resolve(float duration);
 	glm::vec3 calculateSeparatingVelocity();

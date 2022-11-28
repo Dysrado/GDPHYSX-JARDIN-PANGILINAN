@@ -3,29 +3,35 @@
 
 MassAggregateCube::MassAggregateCube(ParticleWorld* world)
 {
-	glm::vec3 scale(0.75, 0.75, 0.75);
+	glm::vec3 scale(1.25, 1.25, 1.25);
 
 	/*for (int i = 0; i < 8;  i++) {
 		particleArray[i] = new Particle();
 		
 	}*/
+	particleArray = new Particle[8];
+
+	for (int i = 0; i < 8; i++) {
+		particleArray[i] = Particle();
+	}
 	/*Particle* temp = new Particle();
-	temp->initVariables(glm::vec3(-3, 0, 5), scale, glm::vec3(0, 0, 0), 2);
+	temp->initVariables(glm::vec3(-3, -1, 5), scale, glm::vec3(0, 0, 0), 2);
 	temp->init();
 	world->particles.push_back(temp);*/
 
-	particleArray = new Particle[8];
 	
+
 	//rods = new ParticleRod[12];
+	//particleArray[0] = Particle();
 	
-	particleArray[0].initVariables(glm::vec3(-3, 0, 5), scale, glm::vec3(0, 0, 0), 2); //F1
-	particleArray[1].initVariables(glm::vec3(-2, 0, 5), scale, glm::vec3(0, 0, 0), 2); //F2
-	particleArray[2].initVariables(glm::vec3(-2, -1, 5), scale, glm::vec3(0, 0, 0), 2); //F4
-	particleArray[3].initVariables(glm::vec3(-3, -1, 5), scale, glm::vec3(0, 0, 0), 2); //F3
-	particleArray[4].initVariables(glm::vec3(-3, 0, 7.5), scale, glm::vec3(0, 0, 0), 2); //B1
-	particleArray[5].initVariables(glm::vec3(-2, 0, 7.5), scale, glm::vec3(0, 0, 0), 2); //B2
-	particleArray[6].initVariables(glm::vec3(-2, -1, 7.5), scale, glm::vec3(0, 0, 0), 2); //B4
-	particleArray[7].initVariables(glm::vec3(-3, -1, 7.5), scale, glm::vec3(0, 0, 0), 2); //B3
+	particleArray[0].initVariables(glm::vec3(-1, 0, 5), scale, glm::vec3(0, 0, 0), 2); //F1
+	particleArray[1].initVariables(glm::vec3(-0, 0, 5), scale, glm::vec3(0, 0, 0), 2); //F2
+	particleArray[2].initVariables(glm::vec3(-0, -1, 5), scale, glm::vec3(0, 0, 0), 2); //F4
+	particleArray[3].initVariables(glm::vec3(-1, -1, 5), scale, glm::vec3(0, 0, 0), 2); //F3
+	particleArray[4].initVariables(glm::vec3(-1, 0, 7.5), scale, glm::vec3(0, 0, 0), 2); //B1
+	particleArray[5].initVariables(glm::vec3(-0, 0, 7.5), scale, glm::vec3(0, 0, 0), 2); //B2
+	particleArray[6].initVariables(glm::vec3(-0, -1, 7.5), scale, glm::vec3(0, 0, 0), 2); //B4
+	particleArray[7].initVariables(glm::vec3(-1, -1, 7.5), scale, glm::vec3(0, 0, 0), 2); //B3
 	
 
 	
@@ -34,10 +40,10 @@ MassAggregateCube::MassAggregateCube(ParticleWorld* world)
 		
 	}
 
-	//rods = new ParticleRod[12];
+	rods = new ParticleRod[12];
 	
 	
-	/*rods[0].particle[0] = &particleArray[0];
+	rods[0].particle[0] = &particleArray[0];
 	rods[0].particle[1] = &particleArray[1];
 	rods[0].length = glm::distance(particleArray[0].getPosition(), particleArray[1].getPosition());
 
@@ -87,17 +93,21 @@ MassAggregateCube::MassAggregateCube(ParticleWorld* world)
 
 	for (int i = 0; i < 12; i++) {
 		world->getContactGenerator().push_back(&rods[i]);
-	}*/
+	}
 
 		//world->particles.push_back(particleArray[i]);
-	
+	//particleArray[0] = new Particle();
+	//world->particles.push_back(&particleArray[0]);
+	//world->particles.push_back(rods[0].particle[0]);
+	//world->particles.push_back(rods[0].particle[1]);
+		//world->particles.push_back(&particleArray[0]);
+
 	for (int i = 0; i < 8; i++) {
 		//particleArray[i] = Particle();
-		std::cout << "Particle Array A " << &particleArray[i] << std::endl;
-		world->particles.push_back(&particleArray[i]);
+		//std::cout << "Particle Array A: " << &particleArray[i] << std::endl;
 		//world->push_back(&particleArray[i]);
+	world->particles.push_back(&particleArray[i]);
 	}
-	//world->particles.push_back(&particleArray[0]);
 	//std::cout << "Position of First: " << particleArray[0].getPosition().x << std::endl;
 	//world->push_back(&particleArray[0]);
 	

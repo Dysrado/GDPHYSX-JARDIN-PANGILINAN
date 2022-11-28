@@ -145,25 +145,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Firework.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MassAggregateCube.cpp" />
     <ClCompile Include="Particle.cpp" />
-    <ClCompile Include="ParticleAnchoredSpring.cpp" />
-    <ClCompile Include="ParticleBungee.cpp" />
+    <ClCompile Include="ParticleContact.cpp" />
     <ClCompile Include="ParticleForceRegistry.cpp" />
     <ClCompile Include="ParticleGravity.cpp" />
+    <ClCompile Include="ParticleLink.cpp" />
     <ClCompile Include="ParticleSpring.cpp" />
+    <ClCompile Include="ParticleWorld.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Firework.h" />
+    <ClInclude Include="MassAggregateCube.h" />
     <ClInclude Include="Particle.h" />
-    <ClInclude Include="ParticleAnchoredSpring.h" />
-    <ClInclude Include="ParticleBungee.h" />
+    <ClInclude Include="ParticleContact.h" />
     <ClInclude Include="ParticleForceGenerator.h" />
     <ClInclude Include="ParticleForceRegistry.h" />
     <ClInclude Include="ParticleGravity.h" />
+    <ClInclude Include="ParticleLink.h" />
     <ClInclude Include="ParticleSpring.h" />
+    <ClInclude Include="ParticleWorld.h" />
     <ClInclude Include="tiny_obj_loader.h" />
   </ItemGroup>
   <ItemGroup>

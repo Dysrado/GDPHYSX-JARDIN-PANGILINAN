@@ -86,7 +86,7 @@ void ParticleWorld::render(GLuint shaderProgram)
 		temp->particle->render(shaderProgram);
 	}*/
 	for (Particles::iterator p = particles.begin(); p != particles.end(); p++) {
-		std::cout << "Particle Array B " << (*p) << std::endl;
+		std::cout << "Particle Array B " << (*p) << " " << (*p)->getPosition().x << " " << (*p)->getPosition().y << " " << (*p)->getPosition().z << std::endl;
 		(*p)->render(shaderProgram);
 	}
 	/*for (int i = 0; i < particles.size(); i++) {

@@ -27,7 +27,6 @@ void ParticleContact::resolveVelocity(float duration)
 	glm::vec3 newSepVelocity = -separatingVelocity * restitution;
 
 	
-
 	// not sure if forceAccum or Acceleration 
 	glm::vec3 accCausedVelocity = particle[0]->getAcceleration();
 	if (particle[1]) {
@@ -44,7 +43,6 @@ void ParticleContact::resolveVelocity(float duration)
 			newSepVelocity.z = 0;
 		}
 	}
-
 	glm::vec3 deltaVelocity = newSepVelocity - separatingVelocity;
 
 	float totalInverseMass = particle[0]->getMass();
@@ -64,6 +62,8 @@ void ParticleContact::resolveVelocity(float duration)
 	if (particle[1]) {
 		particle[1]->setVelocity(particle[1]->getVelocity() + impulsePerIMass * -particle[1]->getMass());
 	}
+
+
 
 
 }
@@ -86,10 +86,20 @@ void ParticleContact::resolveInterpenetration(float duration)
 
 	glm::vec3 movePerIMass = contactNormal * (penetration / totalInverseMass);
 
-	particle[0]->setPosition(particle[0]->getPosition() + (movePerIMass * particle[0]->getMass()));
+	particleMovement[0] = movePerIMass * particle[0]->getMass();
+	if (particle[1]) {
+		particleMovement[1] = movePerIMass * -particle[1]->getMass();
+
+	}
+	else {
+		particleMovement[1] = glm::vec3(0,0,0);
+	}
+
+
+	particle[0]->setPosition(particle[0]->getPosition() +  particleMovement[0]);
 
 	if (particle[1]) {
-		particle[1]->setPosition(particle[1]->getPosition() + (movePerIMass * particle[1]->getMass()));
+		particle[1]->setPosition(particle[1]->getPosition() + particleMovement[1]);
 	}
 	
 }
@@ -101,14 +111,19 @@ void ParticleContactResolver::resolveContacts(ParticleContact* contactArray, uns
 	while (iterationsUsed < iterations) {
 		glm::vec3 max(0);
 		unsigned maxIndex = numContacts;
-		for (unsigned i = 0; i < numContacts; i++) {
+		for (i = 0; i < numContacts; i++) {
 			glm::vec3 sepVel = contactArray[i].calculateSeparatingVelocity();
 
-			if (sepVel.x < max.x && sepVel.y < max.y && sepVel.z < max.z) {
+			if ((sepVel.x < max.x && sepVel.y < max.y && sepVel.z < max.z) && (sepVel.x < 0 && sepVel.y < 0 && sepVel.z < 0) || contactArray[i].penetration > 0) {
 				max = sepVel;
 				maxIndex = i;
 			}
 		}
+
+		if (maxIndex == numContacts) {
+			break;
+		}
+
 
 		contactArray[maxIndex].resolve(duration);
 		iterationsUsed++;

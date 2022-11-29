@@ -17,10 +17,15 @@ class ParticleWorld
 
 public:
 	typedef std::vector<ParticleContactGenerator*> ContactGenerators;
+	std::vector<ParticleContact*> contactList;
+	float checkContacts(Particle* a, Particle* b);
+	void checkCollision();
 	typedef std::vector<Particle*> Particles;
 	ContactGenerators contactGenerators;
 	Particles particles;
 	
+	
+
 	ParticleForceRegistry registry;
 	ParticleWorld(unsigned maxContacts, unsigned iterations = 0);
 	void startFrame();

@@ -2,8 +2,8 @@
 
 void ParticleContact::resolve(float duration)
 {
-	resolveVelocity(duration);
-	resolveInterpenetration(duration);
+	//resolveVelocity(duration);
+	//resolveInterpenetration(duration);
 	
 	//std::cout << "Test";
 }
@@ -95,7 +95,10 @@ void ParticleContact::resolveInterpenetration(float duration)
 		return;
 	}
 
-	glm::vec3 movePerIMass = contactNormal * (penetration / totalInverseMass);
+	glm::vec3 movePerIMass = contactNormal * (-penetration / totalInverseMass);
+	//std::cout << "penetration " << penetration << std::endl;
+	//std::cout << "contactNormal " << contactNormal.x << " " << contactNormal.y << " " << contactNormal.z << std::endl;
+	//std::cout << "totalInverseMass " << totalInverseMass << std::endl;
 
 	particleMovement[0] = movePerIMass * particle[0]->getMass();
 	if (particle[1]) {

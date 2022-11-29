@@ -8,5 +8,6 @@ private:
 public: 
 	ParticleGravity(const glm::vec3 &gravity);
 	virtual void updateForce(Particle* particle, float duration);
+	glm::vec3 getGravity(Particle* particle);
 };
 

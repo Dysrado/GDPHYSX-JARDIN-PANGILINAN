@@ -216,7 +216,10 @@ int main(void)
     MassAggregateCube* Cube = new MassAggregateCube(&world, pg);
     //Cube->pushToWorld(&world);
 
-    //Particle* array;
+    Particle* test = new Particle();
+    test->initVariables(glm::vec3(0, 0, 18), glm::vec3(5,5,5), glm::vec3(0, 0, 0), 2);
+    test->init();
+    world.particles.push_back(test);
     //array = new Particle[1];
     //array[0] = Particle();
     //array[0].initVariables(glm::vec3(-3, 0, 5), glm::vec3(1,1,1), glm::vec3(0, 0, 0), 2); //F1
@@ -275,13 +278,22 @@ int main(void)
                     temp2->init();
 
                     world.particles.push_back(temp2);
-                    // world.getContactGenerator().push_back(temp2);
+                    /*ParticleRod* tempContact = new ParticleRod();
+                    tempContact->particle[0] = test;
+                    tempContact->particle[1] = temp2;
+                    tempContact->length = 1;
+                     world.getContactGenerator().push_back(tempContact);*/
+
+                    ParticleContact* testContact = new ParticleContact();
+                    testContact->particle[0] = temp2;
+                    testContact->particle[1] = test;
+                    world.contactList.push_back(testContact);
                    // world.push_back(temp2);
                     // Edited =============================================================
                     /*while (world.firstParticle->next != NULL) {
                         world.firstParticle = world.firstParticle->next;
                     }*/
-                     world.registry.add(temp2, pg);
+                    // world.registry.add(temp2, pg);
                     
                 }
 

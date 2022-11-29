@@ -47,10 +47,12 @@ MassAggregateCube::MassAggregateCube(ParticleWorld* world, ParticleForceGenerato
 	rods[0].particle[1] = &particleArray[1];
 	//rods[0].length = abs(particleArray[0].getPosition().x - particleArray[1].getPosition().x);
 
-	rods[1].particle[0] = &particleArray[1];
-	rods[1].particle[1] = &particleArray[2];
+	//Vertical
+	rods[1].particle[0] = &particleArray[2];
+	rods[1].particle[1] = &particleArray[1];
 	//rods[1].length = abs(particleArray[1].getPosition().y - particleArray[2].getPosition().y);
-
+	 
+	//Horizontal
 	rods[2].particle[0] = &particleArray[2];
 	rods[2].particle[1] = &particleArray[3];
 	//rods[2].length = abs(particleArray[2].getPosition().x - particleArray[3].getPosition().x);
@@ -63,8 +65,8 @@ MassAggregateCube::MassAggregateCube(ParticleWorld* world, ParticleForceGenerato
 	rods[4].particle[1] = &particleArray[5];
 	//rods[4].length = abs(particleArray[4].getPosition().x - particleArray[5].getPosition().x);
 
-	rods[5].particle[0] = &particleArray[5];
-	rods[5].particle[1] = &particleArray[6];
+	rods[5].particle[0] = &particleArray[6];
+	rods[5].particle[1] = &particleArray[5];
 	//rods[5].length = abs(particleArray[5].getPosition().y - particleArray[6].getPosition().y);
 
 	rods[6].particle[0] = &particleArray[6];
@@ -93,7 +95,7 @@ MassAggregateCube::MassAggregateCube(ParticleWorld* world, ParticleForceGenerato
 	
 	for (int i = 0; i < 12; i++) {
 		rods[i].length = 3.f;
-		world->getContactGenerator().push_back(&rods[i]);
+		//world->getContactGenerator().push_back(&rods[i]);
 	}
 
 		//world->particles.push_back(particleArray[i]);
@@ -107,8 +109,8 @@ MassAggregateCube::MassAggregateCube(ParticleWorld* world, ParticleForceGenerato
 		//particleArray[i] = Particle();
 		//std::cout << "Particle Array A: " << &particleArray[i] << std::endl;
 		//world->push_back(&particleArray[i]);
-	world->particles.push_back(&particleArray[i]);
-	world->registry.add(&particleArray[i], fg);
+	//world->particles.push_back(&particleArray[i]);
+	//world->registry.add(&particleArray[i], fg);
 	}
 	//std::cout << "Position of First: " << particleArray[0].getPosition().x << std::endl;
 	//world->push_back(&particleArray[0]);

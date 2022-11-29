@@ -136,7 +136,7 @@ void Particle::clearAccum()
 void Particle::addForce(const glm::vec3& force)
 {
 	forceAccum += force;
-	std::cout << "ForceAccum: " << forceAccum.y << std::endl;
+	//std::cout << "ForceAccum: " << forceAccum.y << std::endl;
 }
 
 glm::vec3 Particle::getVelocity()

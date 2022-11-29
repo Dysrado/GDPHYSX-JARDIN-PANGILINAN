@@ -1,5 +1,24 @@
 #include "ParticleWorld.h"
 
+float ParticleWorld::checkContacts(Particle* a, Particle* b)
+{
+	return pow((a->getPosition().x + b->getPosition().x), 2) + pow((a->getPosition().y + b->getPosition().y), 2) + pow((a->getPosition().z + b->getPosition().z), 2);
+}
+
+void ParticleWorld::checkCollision()
+{
+	//std::cout << "Running..\n";
+	//std::cout << "contactSize: " << contactList.size() << std::endl;
+	for (int i = 0; i < contactList.size(); i++) {
+		float intersect = checkContacts(contactList[i]->particle[0], contactList[i]->particle[1]);
+		std::cout << "Particle Location " << contactList[i]->particle[0]->getPosition().x << std::endl;;
+		if (intersect < 10) {
+			std::cout << "Collided";
+		}
+	}
+	
+}
+
 ParticleWorld::ParticleWorld(unsigned maxContacts, unsigned iterations):resolver(iterations), maxContacts(maxContacts)
 {
 	contacts = new ParticleContact[maxContacts];
@@ -62,11 +81,13 @@ void ParticleWorld::integrate(float duration) {
 void ParticleWorld::runPhysics(float duration) {
 	registry.updateForces(duration);
 	integrate(duration);
+	checkCollision();
 	unsigned usedContacts = generateContacts();
 	if (usedContacts) {
 		if (calculateIterations) resolver.setIterations(usedContacts * 2); 
 		resolver.resolveContacts(contacts, usedContacts, duration);
 	}
+	std::cout << "RESET" << std::endl;
 
 	
 }

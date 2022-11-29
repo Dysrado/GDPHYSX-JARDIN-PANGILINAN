@@ -1,13 +1,13 @@
 #include "ParticleContact.h"
-
+/*Resolves the contact for velocity and interpenetration*/
 void ParticleContact::resolve(float duration)
 {
-	//resolveVelocity(duration);
-	//resolveInterpenetration(duration);
+	resolveVelocity(duration);
+	resolveInterpenetration(duration);
 	
-	//std::cout << "Test";
+	
 }
-
+/*Calculates the separating velocity of the contact*/
 glm::vec3 ParticleContact::calculateSeparatingVelocity()
 {
 	glm::vec3 relativeVelocity = particle[0]->getVelocity();
@@ -17,30 +17,30 @@ glm::vec3 ParticleContact::calculateSeparatingVelocity()
 	}
 	return relativeVelocity * contactNormal;
 }
-
+/*Impulse calculations for the collision*/
 void ParticleContact::resolveVelocity(float duration)
 {
+
+	//velocity in the direction of the contact
 	glm::vec3 separatingVelocity = calculateSeparatingVelocity();
-	//std::cout << "Particle 0: " << particle[0]->getPosition().x << " " << particle[0]->getPosition().y << " " << particle[0]->getPosition().z << std::endl;
-	//std::cout << "Particle 1: " << particle[1]->getPosition().x << " " << particle[1]->getPosition().y << " " << particle[1]->getPosition().z << std::endl;
+	
+	//Check if needs to be resolved
 	if (separatingVelocity.x > 0 && separatingVelocity.y > 0 && separatingVelocity.z > 0) {
-		std::cout << "Exiting..\n";
 		return;
 	}
-	//std::cout << "Restitution" << restitution;
+
+	//Calculate new Separating Velocity
 	glm::vec3 newSepVelocity = -separatingVelocity * restitution;
 
-	
-	// not sure if forceAccum or Acceleration 
-	glm::vec3 accCausedVelocity = particle[0]->getAcceleration();//no acceleration bc stagnant
-//	std::cout << "Acc1 " << accCausedVelocity.y;
+	//Check velocity buildup from acceleration
+	glm::vec3 accCausedVelocity = particle[0]->getAcceleration();
 	if (particle[1]) {
 		accCausedVelocity -= particle[1]->getAcceleration();
 	}
-	//std::cout << " Acc2 " << accCausedVelocity.y;
 
 	glm::vec3 accCausedSepVelocity = accCausedVelocity * contactNormal * duration;
 
+	// Remove closing velocity due to acceleration from new separating velocity
 	if (accCausedSepVelocity.x < 0 && accCausedSepVelocity.y < 0 && accCausedSepVelocity.z < 0) {
 		newSepVelocity += restitution * accCausedSepVelocity;
 		if (newSepVelocity.x < 0 && newSepVelocity.y < 0 && newSepVelocity.z < 0) {
@@ -51,21 +51,22 @@ void ParticleContact::resolveVelocity(float duration)
 	}
 	glm::vec3 deltaVelocity = newSepVelocity - separatingVelocity;
 
+	//Apply change in velocity in proportion to inverse mass
 	float totalInverseMass = particle[0]->getMass();
 	if (particle[1]) {
 		totalInverseMass += particle[1]->getMass();
 	}
-
+	//if infinite mass return
 	if (totalInverseMass <= 0) {
 		
 		return;
 	}
+	//Impulse Calculation
 	glm::vec3 impulse = deltaVelocity / totalInverseMass;
-	//std::cout << "Impulse " << impulse.x << " " << impulse.y << " " << impulse.z<< std::endl;
-
+	//Calculation of Impulse per Unit
 	glm::vec3 impulsePerIMass = contactNormal * impulse;
 
-	//std::cout << "ImpulsePerImass " << impulsePerIMass.x << " " << impulsePerIMass.y << " " << impulsePerIMass.z<< std::endl;
+	//Apply impulses
 	particle[0]->setVelocity(particle[0]->getVelocity() + impulsePerIMass * particle[0]->getMass());
 
 	if (particle[1]) {
@@ -73,33 +74,31 @@ void ParticleContact::resolveVelocity(float duration)
 	}
 
 
-	//std::cout << "Test";
 
 }
-
+/*Interpenetration resolution of the contact*/
 void ParticleContact::resolveInterpenetration(float duration)
 {
+	//No penetration no need for resolution
 	if (penetration <= 0) {
-		std::cout << "ExitA\n";
 		return;
 	}
 
+	//Compute total inverse mass
 	float totalInverseMass = particle[0]->getMass();
 
 	if (particle[1]) {
 		totalInverseMass += particle[1]->getMass();
 	}
-
+	//Exit if infinite mass
 	if (totalInverseMass <= 0) {
-		std::cout << "ExitB\n";
 		return;
 	}
 
+	//Calculate penetration resolution per unit
 	glm::vec3 movePerIMass = contactNormal * (-penetration / totalInverseMass);
-	//std::cout << "penetration " << penetration << std::endl;
-	//std::cout << "contactNormal " << contactNormal.x << " " << contactNormal.y << " " << contactNormal.z << std::endl;
-	//std::cout << "totalInverseMass " << totalInverseMass << std::endl;
 
+	//Calculate movement amounts
 	particleMovement[0] = movePerIMass * particle[0]->getMass();
 	if (particle[1]) {
 		particleMovement[1] = movePerIMass * -particle[1]->getMass();
@@ -109,20 +108,21 @@ void ParticleContact::resolveInterpenetration(float duration)
 		particleMovement[1] = glm::vec3(0,0,0);
 	}
 
-
+	//Apply the penetration resolution
 	particle[0]->setPosition(particle[0]->getPosition() +  particleMovement[0]);
 
 	if (particle[1]) {
 		particle[1]->setPosition(particle[1]->getPosition() + particleMovement[1]);
 	}
-	//std::cout << "Test";
 }
 
+/*Resolves particle contact list for both penetration and velocity*/
 void ParticleContactResolver::resolveContacts(ParticleContact* contactArray, unsigned numContacts, float duration)
 {
 	unsigned i;
 	iterationsUsed = 0;
 	while (iterationsUsed < iterations) {
+		//contact with largest closing velocity
 		glm::vec3 max(0);
 		unsigned maxIndex = numContacts;
 		for (i = 0; i < numContacts; i++) {
@@ -133,25 +133,23 @@ void ParticleContactResolver::resolveContacts(ParticleContact* contactArray, uns
 				maxIndex = i;
 			}
 		}
-
+		//check if there is something to resolve
 		if (maxIndex == numContacts) {
 			break;
 		}
 
-
+		//resolve contact
 		contactArray[maxIndex].resolve(duration);
 		iterationsUsed++;
 	}
-	//int size = end(contactArray) - begin(contactArray);
-	//std::cout << size << std::endl;
 }
-
+/*sets max iterations*/
 void ParticleContactResolver::setIterations(unsigned iterations)
 {
 	ParticleContactResolver::iterations = iterations;
 }
 
-
+/*Constuctor*/
 ParticleContactResolver::ParticleContactResolver(unsigned iterations):iterations(iterations)
 {
 }

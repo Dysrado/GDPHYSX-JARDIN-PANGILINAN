@@ -8,15 +8,12 @@
 class ParticleWorld
 {
 	ParticleContactResolver resolver;
-
-
-
 	ParticleContact* contacts;
 	bool calculateIterations;
 	unsigned maxContacts;
 
 public:
-	typedef std::vector<ParticleContactGenerator*> ContactGenerators;
+typedef std::vector<ParticleContactGenerator*> ContactGenerators; 
 	std::vector<ParticleContact*> contactList;
 	float checkContacts(Particle* a, Particle* b);
 	void checkCollision();
@@ -33,8 +30,7 @@ public:
 	unsigned generateContacts();
 	void integrate(float duration);
 	void runPhysics(float duration);
-	//ContactGenRegistration* getContactGenerator();
-	//void push_back(Particle *particle);
+
 	void render(GLuint shaderProgram);
 
 };

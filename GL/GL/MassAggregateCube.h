@@ -8,12 +8,13 @@
 
 class MassAggregateCube
 {
+	//Particles to form the corners
 	Particle* particleArray;
+	//Rods to connect the corners
 	ParticleRod* rods;
 
 	public:
 		MassAggregateCube(ParticleWorld* world, ParticleForceGenerator* fg);
-		void pushToWorld(ParticleWorld* world);
 
 
 	

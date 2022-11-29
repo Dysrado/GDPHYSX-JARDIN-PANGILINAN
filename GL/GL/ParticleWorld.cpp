@@ -1,17 +1,15 @@
 #include "ParticleWorld.h"
-
+/*Returns the distance from one end of Particle A to Particle B*/
 float ParticleWorld::checkContacts(Particle* a, Particle* b)
 {
 	return pow((a->getPosition().x + b->getPosition().x), 2) + pow((a->getPosition().y + b->getPosition().y), 2) + pow((a->getPosition().z + b->getPosition().z), 2);
 }
 
+/*Runs through a list to check if any of the two particles are colliding*/
 void ParticleWorld::checkCollision()
 {
-	//std::cout << "Running..\n";
-	//std::cout << "contactSize: " << contactList.size() << std::endl;
 	for (int i = 0; i < contactList.size(); i++) {
 		float intersect = checkContacts(contactList[i]->particle[0], contactList[i]->particle[1]);
-		std::cout << "Particle Location " << contactList[i]->particle[0]->getPosition().x << std::endl;;
 		if (intersect < 10) {
 			std::cout << "Collided";
 		}
@@ -19,36 +17,29 @@ void ParticleWorld::checkCollision()
 	
 }
 
+/*Constructor for Particle World*/
 ParticleWorld::ParticleWorld(unsigned maxContacts, unsigned iterations):resolver(iterations), maxContacts(maxContacts)
 {
 	contacts = new ParticleContact[maxContacts];
 	calculateIterations = (iterations == 0);
 }
 
+/*Runs at the start of the game loop and clears force accumulators*/
 void ParticleWorld::startFrame()
 {
-	// Edited =============================================================
-	/*ParticleRegistration* reg = firstParticle;
-	while (reg) {
-		reg->particle->clearAccum();
-		reg = reg->next;
-	}*/
-
 	for (Particles::iterator p = particles.begin(); p != particles.end(); p++) {
 		(*p)->clearAccum();
 	}
-	//for (int i = 0; i < particles.size(); i++) {
-	//	particles[i]->clearAccum();
-	//}
+	
 }
-
+/*Returns the contactGenerators list*/
 ParticleWorld::ContactGenerators& ParticleWorld::getContactGenerator()
 {
 	return contactGenerators;
 }
 
 
-
+/*Generates the contacts based from the contactGenerator List and checks if there are any contacts betweent the particle*/
 unsigned ParticleWorld::generateContacts()
 {
 	unsigned limit = maxContacts;
@@ -63,21 +54,16 @@ unsigned ParticleWorld::generateContacts()
 	return maxContacts - limit;
 }
 
+/*Runs the movement for each particle*/
 void ParticleWorld::integrate(float duration) {
-	// Edited =============================================================
-	/*ParticleRegistration* reg = firstParticle;
-	while (reg) {
-		reg->particle->integrate(duration);
-		reg = reg->next;
-	}*/
+	
 	for (Particles::iterator p = particles.begin(); p != particles.end(); p++) {
 		(*p)->integrate(duration);
 	}
-	/*for (int i = 0; i < particles.size(); i++) {
-		particles[i]->integrate(duration);
-	}*/
+	
 }
 
+/*Deploys the physics simulation for the particle world*/
 void ParticleWorld::runPhysics(float duration) {
 	registry.updateForces(duration);
 	integrate(duration);
@@ -87,31 +73,16 @@ void ParticleWorld::runPhysics(float duration) {
 		if (calculateIterations) resolver.setIterations(usedContacts * 2); 
 		resolver.resolveContacts(contacts, usedContacts, duration);
 	}
-	std::cout << "RESET" << std::endl;
-
-	
 }
 
 
-//void ParticleWorld::push_back(Particle* particle)
-//{
-//	particles.push_back(particle);
-//}
-
-
+/*Renders each particle onto the scene*/
 void ParticleWorld::render(GLuint shaderProgram)
 {
-	// Edited =============================================================
-	/*ParticleRegistration* temp = firstParticle;
-	if (temp != NULL) {
-		temp->particle->render(shaderProgram);
-	}*/
+
 	for (Particles::iterator p = particles.begin(); p != particles.end(); p++) {
-		//std::cout << "Particle Array B " << (*p) << " " << (*p)->getPosition().x << " " << (*p)->getPosition().y << " " << (*p)->getPosition().z << std::endl;
 		(*p)->render(shaderProgram);
 	}
-	/*for (int i = 0; i < particles.size(); i++) {
-		particles[i]->render(shaderProgram);
-	}*/
+	
 
 }

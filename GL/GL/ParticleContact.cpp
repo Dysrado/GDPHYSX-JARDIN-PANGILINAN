@@ -32,12 +32,12 @@ void ParticleContact::resolveVelocity(float duration)
 
 	
 	// not sure if forceAccum or Acceleration 
-	glm::vec3 accCausedVelocity = particle[0]->getAcceleration();
-	std::cout << "Acc1 " << accCausedVelocity.y;
+	glm::vec3 accCausedVelocity = particle[0]->getAcceleration();//no acceleration bc stagnant
+//	std::cout << "Acc1 " << accCausedVelocity.y;
 	if (particle[1]) {
 		accCausedVelocity -= particle[1]->getAcceleration();
 	}
-	std::cout << " Acc2 " << accCausedVelocity.y;
+	//std::cout << " Acc2 " << accCausedVelocity.y;
 
 	glm::vec3 accCausedSepVelocity = accCausedVelocity * contactNormal * duration;
 

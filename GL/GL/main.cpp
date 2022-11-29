@@ -3,14 +3,10 @@
 */
 
 #include "Particle.h" 
-#include "Firework.h" 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
 #include "ParticleForceRegistry.h"
 #include "ParticleGravity.h"
-#include "ParticleSpring.h"
-#include "ParticleAnchoredSpring.h"
-#include "ParticleBungee.h"
 #include "ParticleWorld.h"
 #include "MassAggregateCube.h"
 
@@ -29,6 +25,7 @@ int main(void)
     bool startup = false;
     tinyobj::attrib_t attributes1;
 
+    // determines if loading the object is successful
     bool success = tinyobj::LoadObj(&attributes1,
         &shapes, &material1,
         &warning, &error, path.c_str());
@@ -150,7 +147,6 @@ int main(void)
     glm::vec3 cameraPos = glm::vec3(-2 , 0, -10.f);
 
     glm::mat4 cameraPositionMatrix = glm::translate(glm::mat4(1.f), cameraPos * -1.f);
-   // cameraPositionMatrix = glm::rotate(cameraPositionMatrix, 100.0f, glm::vec3(0,1,0));
     
     glm::vec3 WorldUp = glm::vec3(0, 1.f, 0);
     glm::vec3 center = glm::vec3(0, 3.f, 0);
@@ -164,28 +160,21 @@ int main(void)
     glm::vec3 R = glm::normalize(glm::cross(F, WorldUp));
     // up vector 
     glm::vec3 U = glm::normalize(glm::cross(R, F));
-
+    // camera orientation
     glm::mat4 cameraOrientation = glm::mat4(
         glm::vec4(R, 0),
         glm::vec4(U, 0),
         glm::vec4((F * -1.f), 0),
         glm::vec4(glm::vec3(0, 0, 0), 1)
     );
+    // view matrix for camera
     glm::mat4 view = cameraOrientation * cameraPositionMatrix;
-
-    // Initialize Particle as object
-   /* Particle* box = new Particle();
-    box->initVariables(glm::vec3(0, 0, 5), glm::vec3(3, 3, 3), glm::vec3(0, 0, 0), 2);
-    box->init();*/
-
-
-    //std::vector<Particle*> particleList;
-
     // Used for deltaTime computation
     float lastTime = glfwGetTime();
     // Used for Cooldown 
     float lastCDTime = glfwGetTime();
     float totalDuration = 0;
+
 
     enum type {
         PISTOL = 0,
@@ -195,41 +184,25 @@ int main(void)
         FIREWORK
     };
 
-    /*enum springType {
-        NONE = 0,
-        BASIC,
-        ANCHORED,
-        BUNGEE
-    };*/
-
-
-
+    // Default projectile
     type projectileType = ARTILLERY;
-    //springType spring = NONE;
 
     /* ======================= Force Values ======================= */
-    //ParticleForceRegistry springReg;
-    ParticleGravity* pg = new ParticleGravity(glm::vec3(0,-20,0));
+    ParticleGravity* pg = new ParticleGravity(glm::vec3(0,-20,0)); // Gravity
 
-    const static unsigned maxContacts = 256;
-    ParticleWorld world(maxContacts);
-    MassAggregateCube* Cube = new MassAggregateCube(&world, pg);
-    //Cube->pushToWorld(&world);
+    const static unsigned maxContacts = 256; // number of maximum possible contacts
+    ParticleWorld world(maxContacts); // create a particle world
+    MassAggregateCube* Cube = new MassAggregateCube(&world, pg); // instantiate a mass aggregate cube
 
-    Particle* test = new Particle();
+    /*Particle* test = new Particle();
     test->initVariables(glm::vec3(0, 0, 18), glm::vec3(5,5,5), glm::vec3(0, 0, 0), 2);
     test->init();
-    world.particles.push_back(test);
-    //array = new Particle[1];
-    //array[0] = Particle();
-    //array[0].initVariables(glm::vec3(-3, 0, 5), glm::vec3(1,1,1), glm::vec3(0, 0, 0), 2); //F1
-    //array[0].init();
-    //world.particles.push_back(&array[0]);
-    //world.push_back(box);
+    world.particles.push_back(test);*/
+    
     /* Loop until the user closes the window or user presses the Escape key*/
     while (!glfwWindowShouldClose(window))
-    
     {
+        /* Start of the physics frame */
         world.startFrame();
         /* Current Time */
         GLfloat currTime = glfwGetTime();
@@ -240,70 +213,30 @@ int main(void)
         totalDuration += deltaTime;
 
 
-        /* Keyboard Input */
-        if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS) { // swaps to ARTILLERY
-            projectileType = ARTILLERY;
-            //spring = NONE;
-            //std::cout << "Currently set to Artillery Ammo\n";
-
-        }
-        //else if (glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS) { // swaps to Basic Spring
-        //    projectileType = ARTILLERY;
-        //    spring = BASIC;
-        //    std::cout << "Currently set to Basic Spring\n";
-        //}
-        //else if (glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS) { // swaps to Anchored Spring
-        //    projectileType = ARTILLERY;
-        //    spring = ANCHORED;
-        //    std::cout << "Currently set to Anchored Spring\n";
-        //}
-        //else if (glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS) { // swaps to Bungee Spring
-        //    projectileType = ARTILLERY;
-        //    spring = BUNGEE;
-        //    std::cout << "Currently set to Bungee Spring\n";
-        //}
-       // world.particles.push_back(&array[0]);
+        /* Input */
         if (cooldownTimer > lastCDTime + 1) { // cooldown, every 1 second
             if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) { // on mouse button
-                lastCDTime = glfwGetTime();
-  /*              Particle* a = new Particle();
-                Particle* b = new Particle();
-                b->initVariables(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType);
-                b->init();*/
+                lastCDTime = glfwGetTime();        
                 
+                // Spawns a projectile
+                Particle* temp2 = new Particle();
+                temp2->initVariables(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), 1); // instantiates a particle depenting on projectileType
+                temp2->init(); // initializes the particle for rendering
 
-                if (projectileType == ARTILLERY /* && spring == NONE*/) { // adds the particle artillery
-                    Particle* temp2 = new Particle();
-                    temp2->initVariables(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), projectileType); // instantiates a particle depenting on projectileType
-                    temp2->init();
+                world.particles.push_back(temp2);
+                /*ParticleRod* tempContact = new ParticleRod();
+                tempContact->particle[0] = test;
+                tempContact->particle[1] = temp2;
+                tempContact->length = 1;
+                world.getContactGenerator().push_back(tempContact);*/
 
-                    world.particles.push_back(temp2);
-                    /*ParticleRod* tempContact = new ParticleRod();
-                    tempContact->particle[0] = test;
-                    tempContact->particle[1] = temp2;
-                    tempContact->length = 1;
-                     world.getContactGenerator().push_back(tempContact);*/
-
-                    ParticleContact* testContact = new ParticleContact();
-                    testContact->particle[0] = temp2;
-                    testContact->particle[1] = test;
-                    world.contactList.push_back(testContact);
-                   // world.push_back(temp2);
-                    // Edited =============================================================
-                    /*while (world.firstParticle->next != NULL) {
-                        world.firstParticle = world.firstParticle->next;
-                    }*/
-                    // world.registry.add(temp2, pg);
-                    
-                }
-
-               
-                
+                /*ParticleContact* testContact = new ParticleContact();
+                testContact->particle[0] = temp2;
+                testContact->particle[1] = test;
+                world.contactList.push_back(testContact);*/               
             }
         }
         
-        
-
         // Updates the Uniforms
         unsigned int projectionLoc = glGetUniformLocation(shaderProgram, "projection");
         glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
@@ -317,33 +250,21 @@ int main(void)
         // Bind
         glBindVertexArray(VAO);
 
-
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
 
         /* Poll for and process events */
         glfwPollEvents();
 
-
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
 
-        //// Renders the vector of Particles
-        //for (int i = 0; i < particleList.size(); i++) {
-        //    particleList[i]->render(shaderProgram);
-        //}
-
-        /*while (world.firstParticle != NULL) {
-            
-            world.firstParticle = world.firstParticle->next;
-        }*/
-
+        //// Renders the Particles
         world.render(shaderProgram);
 
-        //box->render(shaderProgram);
-        //int size = end(world.particles) - begin(world.particles);
-        //std::cout << size << std::endl;
+        // Runs particles physics
         world.runPhysics(deltaTime);
+
         lastTime = currTime;
     }
 
@@ -351,13 +272,6 @@ int main(void)
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteBuffers(1, &EBO);
-
-    //// Delete Buffers for the lists
-    //for (int i = 0; i < particleList.size(); i++) {
-    //    particleList[i]->deleteVertex();
-    //}
-
-    //box->deleteVertex();
 
     glfwTerminate();
     return 0;

@@ -7,37 +7,32 @@ float ParticleLink::currentLength() const {
 }
 unsigned ParticleRod::addContact(ParticleContact* contact, unsigned limit) const
 {
+    // Find the length of the rod
     float currentLen = currentLength();
+
+    // Check if it over-extends
     if (currentLen == length) {
-        //std::cout << "Same Length\n";
         return 0;
     }
 
-    //std::cout << "Current Len: " << currentLen << std::endl;
-    //std::cout << "Given Length " << length << std::endl << std::endl;
-    
+    // Otherwise return the contact
     contact->particle[0] = particle[0];
     contact->particle[1] = particle[1];
 
+    // Calculate the normal
     glm::vec3 normal = particle[1]->getPosition() - particle[0]->getPosition();
     normal = glm::normalize(normal);
-   // std::cout << "Normal " << normal.y << std::endl;
     
-    if (currentLen > length) {
+    // The contact normal depends on whether we're extending or compressing
+    if (currentLen > length) { // Extending
         contact->contactNormal = normal;
         contact->penetration = currentLen - length;
-        std::cout << "Extending...\n";
-        std::cout << "currentLength: " << currentLen << " vs length: " << length << "\n\n";
     }
-    else {
+    else { // Compressing
         contact->contactNormal = normal * glm::vec3(-1);
         contact->penetration = length - currentLen;
-
-       // std::cout << "Shrinking...\n";
-        //std::cout << "currentLength: " << currentLen << " vs length: " << length << "\n\n";
     }
-    //std::cout << "Contact Normal = " << contact->contactNormal.y << std::endl;
+    // Always use zero restitution for no bounciness
     contact->restitution = 0;
-   // std::cout << "Returning 1\n";
     return 1;
 }

@@ -209,11 +209,11 @@ int main(void)
 
     /* ======================= Force Values ======================= */
     //ParticleForceRegistry springReg;
- //   ParticleGravity* pg = new ParticleGravity(glm::vec3(0,-20,0));
+    ParticleGravity* pg = new ParticleGravity(glm::vec3(0,-20,0));
 
     const static unsigned maxContacts = 256;
     ParticleWorld world(maxContacts);
-    MassAggregateCube* Cube = new MassAggregateCube(&world);
+    MassAggregateCube* Cube = new MassAggregateCube(&world, pg);
     //Cube->pushToWorld(&world);
 
     //Particle* array;
@@ -275,12 +275,13 @@ int main(void)
                     temp2->init();
 
                     world.particles.push_back(temp2);
+                    // world.getContactGenerator().push_back(temp2);
                    // world.push_back(temp2);
                     // Edited =============================================================
                     /*while (world.firstParticle->next != NULL) {
                         world.firstParticle = world.firstParticle->next;
                     }*/
-                  //  world.registry.add(temp2, pg);
+                     world.registry.add(temp2, pg);
                     
                 }
 
@@ -328,7 +329,8 @@ int main(void)
         world.render(shaderProgram);
 
         //box->render(shaderProgram);
-
+        //int size = end(world.particles) - begin(world.particles);
+        //std::cout << size << std::endl;
         world.runPhysics(deltaTime);
         lastTime = currTime;
     }

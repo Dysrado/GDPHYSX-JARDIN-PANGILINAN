@@ -3,6 +3,7 @@
 #include "Particle.h"
 #include "ParticleWorld.h"
 #include "ParticleLink.h"
+#include "ParticleForceGenerator.h"
 
 
 class MassAggregateCube
@@ -11,7 +12,7 @@ class MassAggregateCube
 	ParticleRod* rods;
 
 	public:
-		MassAggregateCube(ParticleWorld* world);
+		MassAggregateCube(ParticleWorld* world, ParticleForceGenerator* fg);
 		void pushToWorld(ParticleWorld* world);
 
 

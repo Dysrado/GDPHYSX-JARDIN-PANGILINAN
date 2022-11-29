@@ -95,6 +95,9 @@ void Particle::integrate(float duration)
 		velocity += resultAcc * duration;
 		//velocity += acceleration * duration; //Updates the velocity of the particle based on acceleration
 		velocity *= pow(damping, duration); //Applies damping to the velocity
+		if (position.y <= -1.5f) {
+			velocity.y = 0;
+		}
 		transform = glm::translate(glm::mat4(1.0f), position); //Appliess linear transformation to the particle
 		transform = glm::scale(transform, this->scale);
 		clearAccum();

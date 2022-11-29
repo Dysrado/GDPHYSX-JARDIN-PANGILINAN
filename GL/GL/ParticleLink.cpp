@@ -27,5 +27,6 @@ unsigned ParticleRod::addContact(ParticleContact* contact, unsigned limit) const
         contact->penetration = length - currentLen;
     }
     contact->restitution = 0;
+   // std::cout << "Returning 1\n";
     return 1;
 }

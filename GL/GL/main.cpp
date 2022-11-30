@@ -183,11 +183,11 @@ int main(void)
     ParticleWorld world(maxContacts); // create a particle world
     MassAggregateCube* Cube = new MassAggregateCube(&world, pg); // instantiate a mass aggregate cube
 
-    Particle* test = new Particle();
+  /*  Particle* test = new Particle();
     test->initVariables(glm::vec3(0, 0, 18), glm::vec3(5,5,5), glm::vec3(0, 0, 0), 2);
     test->init();
     world.particles.push_back(test);
-    world.registry.add(test, pg);
+    world.registry.add(test, pg);*/
     
     /* Loop until the user closes the window or user presses the Escape key*/
     while (!glfwWindowShouldClose(window))

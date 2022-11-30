@@ -10,12 +10,13 @@ ParticleSpring::ParticleSpring(Particle* other, float springConstant, float rest
 void ParticleSpring::updateForce(Particle* particle, float duration)
 {
 	// Calculate the vector of the spring.
-	glm::vec3 force;
+	glm::vec3 force = particle->getPosition();
 
 	//particle->setPosition(&force);
+
 	force -= other->getPosition();
 	// Calculate the magnitude of the force.
-	float magnitude = force.length(); 
+	float magnitude = glm::length(force);
 	magnitude = abs(magnitude - restLength);
 	magnitude *= springConstant;
 	// Calculate the final force and apply it.

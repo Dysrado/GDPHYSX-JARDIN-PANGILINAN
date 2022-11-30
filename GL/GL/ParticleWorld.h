@@ -16,7 +16,7 @@ public:
 typedef std::vector<ParticleContactGenerator*> ContactGenerators; 
 	std::vector<ParticleContact*> contactList;
 	float checkContacts(Particle* a, Particle* b);
-	void checkCollision();
+	void checkCollision(float duration);
 	typedef std::vector<Particle*> Particles;
 	ContactGenerators contactGenerators;
 	Particles particles;

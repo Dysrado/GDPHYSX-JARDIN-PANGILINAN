@@ -2,16 +2,22 @@
 /*Returns the distance from one end of Particle A to Particle B*/
 float ParticleWorld::checkContacts(Particle* a, Particle* b)
 {
-	return pow((a->getPosition().x + b->getPosition().x), 2) + pow((a->getPosition().y + b->getPosition().y), 2) + pow((a->getPosition().z + b->getPosition().z), 2);
+	return pow((a->getPosition().x - b->getPosition().x), 2) + pow((a->getPosition().y - b->getPosition().y), 2) + pow((a->getPosition().z - b->getPosition().z), 2);
 }
 
 /*Runs through a list to check if any of the two particles are colliding*/
-void ParticleWorld::checkCollision()
+void ParticleWorld::checkCollision(float duration)
 {
 	for (int i = 0; i < contactList.size(); i++) {
 		float intersect = checkContacts(contactList[i]->particle[0], contactList[i]->particle[1]);
-		if (intersect < 10) {
-			std::cout << "Collided";
+		if (intersect < 1) {
+			glm::vec3 normal = contactList[i]->particle[1]->getPosition() - contactList[i]->particle[0]->getPosition();
+			normal = glm::normalize(normal);
+			contactList[i]->contactNormal = normal * glm::vec3(-1);
+			contactList[i]->penetration = 1 - intersect;
+			contactList[i]->restitution = 0;
+			contactList[i]->resolve(duration);
+
 		}
 	}
 	
@@ -67,7 +73,7 @@ void ParticleWorld::integrate(float duration) {
 void ParticleWorld::runPhysics(float duration) {
 	registry.updateForces(duration);
 	integrate(duration);
-	checkCollision();
+	checkCollision(duration);
 	unsigned usedContacts = generateContacts();
 	if (usedContacts) {
 		if (calculateIterations) resolver.setIterations(usedContacts * 2); 

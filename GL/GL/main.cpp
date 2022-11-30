@@ -192,12 +192,13 @@ int main(void)
 
     const static unsigned maxContacts = 256; // number of maximum possible contacts
     ParticleWorld world(maxContacts); // create a particle world
-    MassAggregateCube* Cube = new MassAggregateCube(&world, pg); // instantiate a mass aggregate cube
+    //MassAggregateCube* Cube = new MassAggregateCube(&world, pg); // instantiate a mass aggregate cube
 
-    /*Particle* test = new Particle();
+    Particle* test = new Particle();
     test->initVariables(glm::vec3(0, 0, 18), glm::vec3(5,5,5), glm::vec3(0, 0, 0), 2);
     test->init();
-    world.particles.push_back(test);*/
+    world.particles.push_back(test);
+    world.registry.add(test, pg);
     
     /* Loop until the user closes the window or user presses the Escape key*/
     while (!glfwWindowShouldClose(window))
@@ -224,16 +225,17 @@ int main(void)
                 temp2->init(); // initializes the particle for rendering
 
                 world.particles.push_back(temp2);
+                world.registry.add(temp2, pg);
                 /*ParticleRod* tempContact = new ParticleRod();
                 tempContact->particle[0] = test;
                 tempContact->particle[1] = temp2;
                 tempContact->length = 1;
                 world.getContactGenerator().push_back(tempContact);*/
 
-                /*ParticleContact* testContact = new ParticleContact();
+                ParticleContact* testContact = new ParticleContact();
                 testContact->particle[0] = temp2;
                 testContact->particle[1] = test;
-                world.contactList.push_back(testContact);*/               
+                world.contactList.push_back(testContact);           
             }
         }
         

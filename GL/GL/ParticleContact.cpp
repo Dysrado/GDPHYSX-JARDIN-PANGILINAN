@@ -119,6 +119,7 @@ void ParticleContact::resolveInterpenetration(float duration)
 /*Resolves particle contact list for both penetration and velocity*/
 void ParticleContactResolver::resolveContacts(ParticleContact* contactArray, unsigned numContacts, float duration)
 {
+	
 	unsigned i;
 	iterationsUsed = 0;
 	while (iterationsUsed < iterations) {

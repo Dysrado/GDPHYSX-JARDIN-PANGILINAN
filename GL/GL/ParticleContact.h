@@ -14,8 +14,8 @@ public:
 
 	glm::vec3 particleMovement[2];
 
-protected:
 	void resolve(float duration); //Resolves the contact for velocity and interpenetration
+protected:
 	glm::vec3 calculateSeparatingVelocity(); //Calculates the separating velocity of the contact
 
 

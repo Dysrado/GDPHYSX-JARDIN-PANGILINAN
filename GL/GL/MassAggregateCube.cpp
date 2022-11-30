@@ -75,7 +75,7 @@ MassAggregateCube::MassAggregateCube(ParticleWorld* world, ParticleForceGenerato
 	//Pushback particles to world and apply gravity along with it
 	for (int i = 0; i < 8; i++) 
 	world->particles.push_back(&particleArray[i]);
-	world->registry.add(&particleArray[i], fg);
+	//world->registry.add(&particleArray[i], fg);
 	}
 	
 	

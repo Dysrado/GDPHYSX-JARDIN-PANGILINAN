@@ -183,12 +183,6 @@ int main(void)
     ParticleWorld world(maxContacts); // create a particle world
     MassAggregateCube* Cube = new MassAggregateCube(&world, pg); // instantiate a mass aggregate cube
 
-  /*  Particle* test = new Particle();
-    test->initVariables(glm::vec3(0, 0, 18), glm::vec3(5,5,5), glm::vec3(0, 0, 0), 2);
-    test->init();
-    world.particles.push_back(test);
-    world.registry.add(test, pg);*/
-    
     /* Loop until the user closes the window or user presses the Escape key*/
     while (!glfwWindowShouldClose(window))
     {
@@ -202,7 +196,6 @@ int main(void)
         float cooldownTimer = glfwGetTime(); // used for cooldown
         totalDuration += deltaTime;
 
-
         /* Input */
         if (cooldownTimer > lastCDTime + 1) { // cooldown, every 1 second
             if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) { // on mouse button
@@ -215,12 +208,8 @@ int main(void)
 
                 world.particles.push_back(temp2);
                 world.registry.add(temp2, pg);
-                /*ParticleRod* tempContact = new ParticleRod();
-                tempContact->particle[0] = test;
-                tempContact->particle[1] = temp2;
-                tempContact->length = 1;
-                world.getContactGenerator().push_back(tempContact);*/
 
+                // this is used so that the projectile can collide with the cube
                 for (int i = 0; i < 8; i++) {
                     ParticleContact* testContact = new ParticleContact();
                     testContact->particle[0] = temp2;
@@ -228,10 +217,6 @@ int main(void)
                     world.contactList.push_back(testContact);
                     world.contactList.push_back(testContact);           
                 }
-                /*ParticleContact* testContact = new ParticleContact();
-                testContact->particle[0] = temp2;
-                testContact->particle[1] = test;
-                world.contactList.push_back(testContact);*/
             }
         }
         

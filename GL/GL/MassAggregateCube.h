@@ -4,6 +4,7 @@
 #include "ParticleWorld.h"
 #include "ParticleLink.h"
 #include "ParticleForceGenerator.h"
+#include "ParticleSpring.h"
 
 
 class MassAggregateCube
@@ -15,8 +16,5 @@ class MassAggregateCube
 
 	public:
 		MassAggregateCube(ParticleWorld* world, ParticleForceGenerator* fg);
-
-
-	
 };
 

@@ -176,23 +176,12 @@ int main(void)
     float totalDuration = 0;
 
 
-    enum type {
-        PISTOL = 0,
-        ARTILLERY,
-        FIREBALL,
-        LASER,
-        FIREWORK
-    };
-
-    // Default projectile
-    type projectileType = ARTILLERY;
-
     /* ======================= Force Values ======================= */
     ParticleGravity* pg = new ParticleGravity(glm::vec3(0,-20,0)); // Gravity
 
     const static unsigned maxContacts = 256; // number of maximum possible contacts
     ParticleWorld world(maxContacts); // create a particle world
-   MassAggregateCube* Cube = new MassAggregateCube(&world, pg); // instantiate a mass aggregate cube
+    MassAggregateCube* Cube = new MassAggregateCube(&world, pg); // instantiate a mass aggregate cube
 
     Particle* test = new Particle();
     test->initVariables(glm::vec3(0, 0, 18), glm::vec3(5,5,5), glm::vec3(0, 0, 0), 2);

@@ -7,6 +7,7 @@
 #include "Quaternion.h"
 class Matrix4
 {
+public:
 	//Holds the matrix data in array form
 	float data[12];
 

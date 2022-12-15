@@ -7,6 +7,7 @@
 #include "Quaternion.h"
 class Matrix3
 {
+public:
 	float data[9];
 	
 	glm::vec3 operator*(const glm::vec3& vector) const;

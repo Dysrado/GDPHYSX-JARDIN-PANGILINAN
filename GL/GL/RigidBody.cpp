@@ -120,6 +120,8 @@ void RigidBody::addTorque(const glm::vec3& torque)
     isAwake = true;
 }
 
+
+
 void RigidBody::render(GLuint shaderProgram) {
     // Convert the transformMatrix into a glm::mat4
     // place the transform to the matrix

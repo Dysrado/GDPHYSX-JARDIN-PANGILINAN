@@ -13,6 +13,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <vector>
+#include "Particle.h"
 
 class RigidBody
 {
@@ -54,6 +55,11 @@ public:
 
 	//checks if the rigid body is still active
 	bool isAwake;
+
+
+	
+	
+
 
 	// for rendering
 	GLuint VAO = 0, VBO = 0, EBO = 0;

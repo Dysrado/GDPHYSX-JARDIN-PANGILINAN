@@ -10,6 +10,7 @@
 #include "ParticleWorld.h"
 #include "MassAggregateCube.h"
 #include "RigidBody.h"
+#include "World.h"
 
 
 int main(void)
@@ -185,7 +186,9 @@ int main(void)
     //MassAggregateCube* Cube = new MassAggregateCube(&world, pg); // instantiate a mass aggregate cube
 
     Quaternion qIdentity(0, 0, 0, 1);
-    RigidBody rb(glm::vec3(0, 0, 3), qIdentity);
+    World rbworld;
+    RigidBody* rb =  new RigidBody(glm::vec3(0, 0, 0), qIdentity);
+    rbworld.bodies.push_back(rb);
     //rb.initVariables(glm::vec3(2, 0, 5), quaternion);
 
     /* Loop until the user closes the window or user presses the Escape key*/
@@ -193,6 +196,7 @@ int main(void)
     {
         /* Start of the physics frame */
         world.startFrame();
+        rbworld.startFrame();
         /* Current Time */
         GLfloat currTime = glfwGetTime();
 
@@ -249,9 +253,11 @@ int main(void)
 
         //// Renders the Particles
         world.render(shaderProgram);
-        rb.render(shaderProgram);
+        rbworld.render(shaderProgram);
+       // rb.render(shaderProgram);
 
         // Runs particles physics
+        rbworld.runPhysics(deltaTime, world.particles);
         world.runPhysics(deltaTime);
 
         lastTime = currTime;

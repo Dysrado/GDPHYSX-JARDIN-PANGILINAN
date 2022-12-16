@@ -4,11 +4,12 @@
 
 #include "Particle.h" 
 #define TINYOBJLOADER_IMPLEMENTATION
-#include "tiny_obj_loader.h"
+//#include "tiny_obj_loader.h"
 #include "ParticleForceRegistry.h"
 #include "ParticleGravity.h"
 #include "ParticleWorld.h"
 #include "MassAggregateCube.h"
+#include "RigidBody.h"
 
 
 int main(void)
@@ -181,7 +182,11 @@ int main(void)
 
     const static unsigned maxContacts = 256; // number of maximum possible contacts
     ParticleWorld world(maxContacts); // create a particle world
-    MassAggregateCube* Cube = new MassAggregateCube(&world, pg); // instantiate a mass aggregate cube
+    //MassAggregateCube* Cube = new MassAggregateCube(&world, pg); // instantiate a mass aggregate cube
+
+    Quaternion qIdentity(0, 0, 0, 1);
+    RigidBody rb(glm::vec3(0, 0, 3), qIdentity);
+    //rb.initVariables(glm::vec3(2, 0, 5), quaternion);
 
     /* Loop until the user closes the window or user presses the Escape key*/
     while (!glfwWindowShouldClose(window))
@@ -209,14 +214,14 @@ int main(void)
                 world.particles.push_back(temp2);
                 world.registry.add(temp2, pg);
 
-                // this is used so that the projectile can collide with the cube
-                for (int i = 0; i < 8; i++) {
-                    ParticleContact* testContact = new ParticleContact();
-                    testContact->particle[0] = temp2;
-                    testContact->particle[1] = world.particles[i];
-                    world.contactList.push_back(testContact);
-                    world.contactList.push_back(testContact);           
-                }
+                //// this is used so that the projectile can collide with the cube
+                //for (int i = 0; i < 8; i++) {
+                //    ParticleContact* testContact = new ParticleContact();
+                //    testContact->particle[0] = temp2;
+                //    testContact->particle[1] = world.particles[i];
+                //    world.contactList.push_back(testContact);
+                //    world.contactList.push_back(testContact);           
+                //}
             }
         }
         
@@ -244,6 +249,7 @@ int main(void)
 
         //// Renders the Particles
         world.render(shaderProgram);
+        rb.render(shaderProgram);
 
         // Runs particles physics
         world.runPhysics(deltaTime);

@@ -21,6 +21,7 @@ public:
 
 	};
 	Quaternion(float a, float b, float c, float d);
+	Quaternion();
 	void normalize();
 	void operator *= (const Quaternion& multiplier);
 	void rotateByVector(const glm::vec3& vector);

@@ -1,5 +1,17 @@
 #include "Quaternion.h"
 
+Quaternion::Quaternion(float a, float b, float c, float d)
+{
+	r = a;
+	i = b;
+	j = c;
+	k = d;
+}
+
+Quaternion::Quaternion()
+{
+}
+
 void Quaternion::normalize() //Normalize the quaternion to unit length, making it a valid orientation quaternion
 {
 	float d = r * r + i * i + j * j + k * k;

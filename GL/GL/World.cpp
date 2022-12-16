@@ -30,6 +30,10 @@ void World::CollisionDetection(std::vector<Particle*> particles)
 	for (int i = 0; i < particles.size(); i++) {
 		float intersect = checkContacts(particles[i]);
 		if (intersect < 1) {
+			particles[i]->setActive(false);
+			//bodies[0]->addForce(glm::vec3(10, 10, 10));
+			/*bodies[0]->addForceAtBodyPoint(glm::vec3(10,10,10), );*/
+			particles[i]->setPosition(glm::vec3(-30,-5,0));
 			//Remove Particle
 			 //Move the cube
 			std::cout << "This is colliding" << std::endl;

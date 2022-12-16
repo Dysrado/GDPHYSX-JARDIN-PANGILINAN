@@ -1,6 +1,11 @@
 #include "Particle.h"
 #include <cmath>
 
+void Particle::setActive(bool active)
+{
+	isActive = active;
+}
+
 float Particle::getMass()
 {
 	return this->inverseMass;
@@ -109,15 +114,18 @@ void Particle::integrate(float duration)
 
 // Renders or draws the model
 void Particle::render(GLuint shaderProgram) {
-	// set the location
-	unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
-	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
+	if (isActive) {
+		// set the location
+		unsigned int transformLoc = glGetUniformLocation(shaderProgram, "transform");
+		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(transform));
 
-	// use the shader from the main code
-	glUseProgram(shaderProgram);
+		// use the shader from the main code
+		glUseProgram(shaderProgram);
 
-	glBindVertexArray(VAO);
-	glDrawElements(GL_TRIANGLES, mesh_indices.size(), GL_UNSIGNED_INT, 0);
+		glBindVertexArray(VAO);
+		glDrawElements(GL_TRIANGLES, mesh_indices.size(), GL_UNSIGNED_INT, 0);
+	}
+	
 };
 
 // Delete VAO, VBO, and EBO
@@ -152,4 +160,9 @@ void Particle::setVelocity(glm::vec3 vel)
 glm::vec3 Particle::getAcceleration()
 {
 	return acceleration;
+}
+
+glm::vec3 Particle::getForceAccum()
+{
+	return forceAccum;
 }

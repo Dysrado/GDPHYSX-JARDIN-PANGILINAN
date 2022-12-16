@@ -38,6 +38,8 @@ private:
 	float damping = 0.f;
 
 public:
+	bool isActive = true;
+	void setActive(bool active);
 	float getMass();
 	glm::vec3 getPosition();
 	void setPosition(glm::vec3 pos);
@@ -51,6 +53,7 @@ public:
 	glm::vec3 getVelocity();
 	void setVelocity(glm::vec3 vel);
 	glm::vec3 getAcceleration();
+	glm::vec3 getForceAccum();
 
 };
 

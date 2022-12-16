@@ -2,6 +2,9 @@
 
 RigidBody::RigidBody(glm::vec3 pos, Quaternion rot)
 {
+    inverseMass = 1;
+    orientation = rot;
+    position = pos;
     transformMatrix.setOrientationAndPos(rot, pos);
 
     // initialitation for the Particle
@@ -90,10 +93,12 @@ void RigidBody::integrate(float duration) {
     // get linear acceleration from the force input
     lastFrameAcceleration = acceleration;
     lastFrameAcceleration += forceAccum * inverseMass;
+    std::cout << "Force Acumm A: " << forceAccum.x << " " << forceAccum.y << " " << forceAccum.z << std::endl;
 
     // get angular acceleration from torque inputs
     glm::vec3 angularAcceleration = inverseInertiaTensorWorld.transform(torqueAccum);
 
+    std::cout << "Torque Acumm A: " << torqueAccum.x << " " << torqueAccum.y << " " << torqueAccum.z << std::endl;
     // adjust the velocities
     velocity += lastFrameAcceleration * duration;
 
@@ -165,18 +170,26 @@ glm::vec3 RigidBody::getPointInWorldSpace(const glm::vec3& point) const
 
 void RigidBody::addForceAtBodyPoint(const glm::vec3& force, const glm::vec3& point) {
     glm::vec3 pt = getPointInWorldSpace(point);
+    addForceAtPoint(force, pt); 
+    isAwake = true;
     
 }
 
 void RigidBody::addForceAtPoint(const glm::vec3& force,
     const glm::vec3& point)
 {
+
     // Convert to coordinates relative to center of mass.
     glm::vec3 pt = point;
     pt -= position;
-
+    std::cout << "Force Acumm A: " << forceAccum.x << " " << forceAccum.y << " " << forceAccum.z << std::endl;
+    std::cout << "Force Acumm A: " << torqueAccum.x << " " << torqueAccum.y << " " << torqueAccum.z << std::endl;
     forceAccum += force;
+
     torqueAccum += glm::mod(pt, force);
+    std::cout << "Force Acumm B: " << forceAccum.x << " " << forceAccum.y << " " << forceAccum.z << std::endl;
+    std::cout << "Force Acumm B: " << torqueAccum.x << " " << torqueAccum.y << " " << torqueAccum.z << std::endl;
+
 
     isAwake = true;
 }

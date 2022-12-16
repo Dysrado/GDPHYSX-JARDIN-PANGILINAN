@@ -187,7 +187,7 @@ int main(void)
 
     Quaternion qIdentity(0, 0, 0, 1);
     World rbworld;
-    RigidBody* rb =  new RigidBody(glm::vec3(0, 0, 0), qIdentity);
+    RigidBody* rb =  new RigidBody(glm::vec3(0, 0, 7), qIdentity);
     rbworld.bodies.push_back(rb);
     //rb.initVariables(glm::vec3(2, 0, 5), quaternion);
 
@@ -252,8 +252,8 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
 
         //// Renders the Particles
-        world.render(shaderProgram);
         rbworld.render(shaderProgram);
+        world.render(shaderProgram);
        // rb.render(shaderProgram);
 
         // Runs particles physics

@@ -2,6 +2,7 @@
 #include <vector>
 #include "RigidBody.h"
 #include "Particle.h"
+#include "ForceRegistry.h"
 class World
 {
 public:
@@ -10,6 +11,8 @@ public:
 	void integrate(float duration);
 	void runPhysics(float duration, std::vector<Particle*> particles);
 	RigidBodies bodies;
+
+	ForceRegistry registry;
 
 	//Simple Collision Detection
 	void CollisionDetection(std::vector<Particle*> particles);

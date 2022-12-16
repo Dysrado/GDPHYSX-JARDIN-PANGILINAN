@@ -2,10 +2,19 @@
 
 RigidBody::RigidBody(glm::vec3 pos, Quaternion rot)
 {
+    linearDamping = .99f;
+    angularDamping = .99f;
     inverseMass = 1;
     orientation = rot;
     position = pos;
     transformMatrix.setOrientationAndPos(rot, pos);
+
+
+    Matrix3 identity;
+    identity.data[0] = 1;
+    identity.data[4] = 1;
+    identity.data[8] = 1;
+    setInertiaTensor(identity);
 
     // initialitation for the Particle
     std::string path = "3D/box.obj";
@@ -93,21 +102,28 @@ void RigidBody::integrate(float duration) {
     // get linear acceleration from the force input
     lastFrameAcceleration = acceleration;
     lastFrameAcceleration += forceAccum * inverseMass;
-    std::cout << "Force Acumm A: " << forceAccum.x << " " << forceAccum.y << " " << forceAccum.z << std::endl;
+
+    //std::cout << "Force Acumm: " << torqueAccum.x << " " << torqueAccum.y << " " << torqueAccum.z << std::endl;
+    //std::cout << "Position: " << getPosition().z << "\n";
 
     // get angular acceleration from torque inputs
-    glm::vec3 angularAcceleration = inverseInertiaTensorWorld.transform(torqueAccum);
+    glm::vec3 angularAcceleration = inverseInertiaTensor.transform(torqueAccum);
 
-    std::cout << "Torque Acumm A: " << torqueAccum.x << " " << torqueAccum.y << " " << torqueAccum.z << std::endl;
+    std::cout << "Torque Acumm: " << torqueAccum.x << " " << torqueAccum.y << " " << torqueAccum.z << std::endl;
+    
     // adjust the velocities
     velocity += lastFrameAcceleration * duration;
 
     rotation += angularAcceleration * duration;
 
+    std::cout << "\nangularAccel: "<< angularAcceleration.z <<"\n";
     // drag
     // check linear damping
     velocity *= pow(linearDamping, duration);
     rotation *= pow(angularDamping, duration);
+
+    position += velocity * duration;
+    orientation.addScaledVector(rotation, duration);
 
     calculateDerivedData();
 
@@ -131,7 +147,7 @@ void RigidBody::render(GLuint shaderProgram) {
     // Convert the transformMatrix into a glm::mat4
     // place the transform to the matrix
     glm::mat4 transform = glm::mat4(1.f);
-    //transform = glm::scale(transform, glm::vec3(4,4,4));
+    transform = glm::scale(transform, glm::vec3(4,4,4));
     transform = glm::translate(transform, 
         glm::vec3(
             transformMatrix.data[3],
@@ -182,14 +198,11 @@ void RigidBody::addForceAtPoint(const glm::vec3& force,
     // Convert to coordinates relative to center of mass.
     glm::vec3 pt = point;
     pt -= position;
-    std::cout << "Force Acumm A: " << forceAccum.x << " " << forceAccum.y << " " << forceAccum.z << std::endl;
-    std::cout << "Force Acumm A: " << torqueAccum.x << " " << torqueAccum.y << " " << torqueAccum.z << std::endl;
+
     forceAccum += force;
-
     torqueAccum += glm::mod(pt, force);
-    std::cout << "Force Acumm B: " << forceAccum.x << " " << forceAccum.y << " " << forceAccum.z << std::endl;
-    std::cout << "Force Acumm B: " << torqueAccum.x << " " << torqueAccum.y << " " << torqueAccum.z << std::endl;
 
+    //std::cout << "Force Acumm: " << forceAccum.x << " " << forceAccum.y << " " << forceAccum.z << std::endl;
 
     isAwake = true;
 }
@@ -214,4 +227,12 @@ void RigidBody::setAcceleration(const float x, const float y, const float z)
     acceleration.x = x;
     acceleration.y = y;
     acceleration.z = z;
+}
+
+glm::vec3 RigidBody::getPosition()
+{
+    glm::vec3 temp = glm::vec3(transformMatrix.data[3],
+        transformMatrix.data[7],
+        transformMatrix.data[11]);
+    return temp;
 }

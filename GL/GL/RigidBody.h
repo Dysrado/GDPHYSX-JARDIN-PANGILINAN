@@ -40,6 +40,8 @@ public:
 	// inverse inertia tensor of the body in world space
 	Matrix3 inverseInertiaTensorWorld;
 
+	Matrix3 inverseInertiaTensor;
+
 	// transform matrix for making body space into world space
 	Matrix4 transformMatrix;
 
@@ -51,7 +53,7 @@ public:
 	glm::vec3 acceleration;
 	glm::vec3 lastFrameAcceleration;
 
-	Matrix3 inverseInertiaTensor;
+	
 
 	//checks if the rigid body is still active
 	bool isAwake;
@@ -97,6 +99,8 @@ public:
 	float linearDamping;
 
 	void setAcceleration(const float x, const float y, const float z);
+
+	glm::vec3 getPosition();
 
 };
 

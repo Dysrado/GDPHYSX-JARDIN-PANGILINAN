@@ -18,10 +18,10 @@ void World::integrate(float duration)
 
 void World::runPhysics(float duration, std::vector<Particle*> particles)
 {
-	//registry.updateForces(duration);
+	registry.updateForces(duration);
 	// Then integrate the objects.
-	integrate(duration);
 	CollisionDetection(particles);
+	integrate(duration);
 
 }
 
@@ -31,8 +31,9 @@ void World::CollisionDetection(std::vector<Particle*> particles)
 		float intersect = checkContacts(particles[i]);
 		if (intersect < 1) {
 			particles[i]->setActive(false);
-			//bodies[0]->addForce(glm::vec3(10, 10, 10));
-			/*bodies[0]->addForceAtBodyPoint(glm::vec3(10,10,10), );*/
+			//bodies[0]->addForce(glm::vec3(0, 0, 100));
+			bodies[0]->addTorque(glm::vec3(100, 100, .5));
+			//bodies[0]->addForceAtBodyPoint(glm::vec3(0, 0, 2), particles[i]->getPosition());
 			particles[i]->setPosition(glm::vec3(-30,-5,0));
 			//Remove Particle
 			 //Move the cube

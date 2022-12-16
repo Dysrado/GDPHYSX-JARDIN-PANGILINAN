@@ -180,7 +180,6 @@ int main(void)
 
     /* ======================= Force Values ======================= */
     ParticleGravity* pg = new ParticleGravity(glm::vec3(0,-20,0)); // Gravity
-
     const static unsigned maxContacts = 256; // number of maximum possible contacts
     ParticleWorld world(maxContacts); // create a particle world
     //MassAggregateCube* Cube = new MassAggregateCube(&world, pg); // instantiate a mass aggregate cube

@@ -2,8 +2,8 @@
 
 RigidBody::RigidBody(glm::vec3 pos, Quaternion rot)
 {
-    linearDamping = .99f;
-    angularDamping = .99f;
+    linearDamping = .95f;
+    angularDamping = .95f;
     inverseMass = 1;
     orientation = rot;
     position = pos;
@@ -11,9 +11,9 @@ RigidBody::RigidBody(glm::vec3 pos, Quaternion rot)
 
 
     Matrix3 identity;
-    identity.data[0] = 1;
-    identity.data[4] = 1;
-    identity.data[8] = 1;
+    identity.data[0] = 1 / 12 * inverseMass * (2);
+    identity.data[4] = 1 / 12 * inverseMass * (2);
+    identity.data[8] = 1 / 12 * inverseMass * (2);
     setInertiaTensor(identity);
 
     // initialitation for the Particle
@@ -75,6 +75,35 @@ void RigidBody::calculateDerivedData()
     transformMatrix.data[10] = 1 - 2 * orientation.i * orientation.i -
         2 * orientation.j * orientation.j;
     transformMatrix.data[11] = position.z;
+
+    // calculates the inverseInertiaTensorWorld
+    Matrix4 rotmat = transformMatrix;
+    Matrix3 iitBody = inverseInertiaTensor;
+    Matrix3 iitWorld = inverseInertiaTensorWorld;
+
+    float t4 = rotmat.data[0] * iitBody.data[0] + rotmat.data[1] * iitBody.data[3] + rotmat.data[2] * iitBody.data[6]; 
+    float t9 = rotmat.data[0] * iitBody.data[1] + rotmat.data[1] * iitBody.data[4] + rotmat.data[2] * iitBody.data[7];
+    float t14 = rotmat.data[0] * iitBody.data[2] + rotmat.data[1] * iitBody.data[5] + rotmat.data[2] * iitBody.data[8];
+    float t28 = rotmat.data[4] * iitBody.data[0] + rotmat.data[5] * iitBody.data[3] + rotmat.data[6] * iitBody.data[6];
+    float t33 = rotmat.data[4] * iitBody.data[1] + rotmat.data[5] * iitBody.data[4] + rotmat.data[6] * iitBody.data[7];
+    float t38 = rotmat.data[4] * iitBody.data[2] + rotmat.data[5] * iitBody.data[5] + rotmat.data[6] * iitBody.data[8];
+    float t52 = rotmat.data[8] * iitBody.data[0] + rotmat.data[9] * iitBody.data[3] + rotmat.data[10] * iitBody.data[6];
+    float t57 = rotmat.data[8] * iitBody.data[1] + rotmat.data[9] * iitBody.data[4] + rotmat.data[10] * iitBody.data[7];
+    float t62 = rotmat.data[8] * iitBody.data[2] + rotmat.data[9] * iitBody.data[5] + rotmat.data[10] * iitBody.data[8];
+
+    inverseInertiaTensorWorld.data[0] = t4 * rotmat.data[0] + t9 * rotmat.data[1] + t14 * rotmat.data[2];
+    inverseInertiaTensorWorld.data[1] = t4 * rotmat.data[4] + t9 * rotmat.data[5] + t14 * rotmat.data[6]; 
+    inverseInertiaTensorWorld.data[2] = t4 * rotmat.data[8] + t9 * rotmat.data[9] + t14 * rotmat.data[10];
+    inverseInertiaTensorWorld.data[3] = t28 * rotmat.data[0] + t33 * rotmat.data[1] + t38 * rotmat.data[2];
+    inverseInertiaTensorWorld.data[4] = t28 * rotmat.data[4] + t33 * rotmat.data[5] + t38 * rotmat.data[6];
+    inverseInertiaTensorWorld.data[5] = t28 * rotmat.data[8] + t33 * rotmat.data[9] + t38 * rotmat.data[10];
+    inverseInertiaTensorWorld.data[6] = t52 * rotmat.data[0] + t57 * rotmat.data[1] + t62 * rotmat.data[2];
+    inverseInertiaTensorWorld.data[7] = t52 * rotmat.data[4] + t57 * rotmat.data[5] + t62 * rotmat.data[6];
+    inverseInertiaTensorWorld.data[8] = t52 * rotmat.data[8] + t57 * rotmat.data[9] + t62 * rotmat.data[10];
+
+    transformMatrix = rotmat;
+    inverseInertiaTensor = iitBody;
+    //inverseInertiaTensorWorld = iitWorld; 
 }
 
 
@@ -85,12 +114,6 @@ void RigidBody::setInertiaTensor(const Matrix3 &inertiaTensor)
     //_checkInverseInertiaTensor(inverseInertiaTensor);
 }
 
-//static inline void _calculateTransformMatrix(Matrix4& transformMatrix,
-//    const glm::vec3& position,
-//    const Quaternion& orientation)
-//{
-//    
-//}
 
 void RigidBody::addForce(const glm::vec3& force) {
     forceAccum += force;
@@ -103,26 +126,26 @@ void RigidBody::integrate(float duration) {
     lastFrameAcceleration = acceleration;
     lastFrameAcceleration += forceAccum * inverseMass;
 
-    //std::cout << "Force Acumm: " << torqueAccum.x << " " << torqueAccum.y << " " << torqueAccum.z << std::endl;
+    std::cout << "acceleration: " << acceleration.x << " " << acceleration.y << " " << acceleration.z << std::endl;
     //std::cout << "Position: " << getPosition().z << "\n";
 
     // get angular acceleration from torque inputs
-    glm::vec3 angularAcceleration = inverseInertiaTensor.transform(torqueAccum);
+    glm::vec3 angularAcceleration = inverseInertiaTensorWorld.transform(torqueAccum);
 
-    std::cout << "Torque Acumm: " << torqueAccum.x << " " << torqueAccum.y << " " << torqueAccum.z << std::endl;
+    //std::cout << "angularAcceleration: " << angularAcceleration.x << " " << angularAcceleration.y << " " << angularAcceleration.z << std::endl;
     
     // adjust the velocities
     velocity += lastFrameAcceleration * duration;
 
     rotation += angularAcceleration * duration;
 
-    std::cout << "\nangularAccel: "<< angularAcceleration.z <<"\n";
     // drag
     // check linear damping
     velocity *= pow(linearDamping, duration);
     rotation *= pow(angularDamping, duration);
 
     position += velocity * duration;
+    std::cout << "rotation: " << rotation.x << " " << rotation.y << " " << rotation.z << std::endl;
     orientation.addScaledVector(rotation, duration);
 
     calculateDerivedData();
@@ -147,7 +170,7 @@ void RigidBody::render(GLuint shaderProgram) {
     // Convert the transformMatrix into a glm::mat4
     // place the transform to the matrix
     glm::mat4 transform = glm::mat4(1.f);
-    transform = glm::scale(transform, glm::vec3(4,4,4));
+    //transform = glm::scale(transform, glm::vec3(4,4,4));
     transform = glm::translate(transform, 
         glm::vec3(
             transformMatrix.data[3],
@@ -186,6 +209,8 @@ glm::vec3 RigidBody::getPointInWorldSpace(const glm::vec3& point) const
 
 void RigidBody::addForceAtBodyPoint(const glm::vec3& force, const glm::vec3& point) {
     glm::vec3 pt = getPointInWorldSpace(point);
+    
+    //std::cout << "pt " << pt.x << " " << pt.y << " " << pt.z << "\n"; // UNDEFINED
     addForceAtPoint(force, pt); 
     isAwake = true;
     

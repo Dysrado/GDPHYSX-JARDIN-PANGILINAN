@@ -53,14 +53,8 @@ public:
 	glm::vec3 acceleration;
 	glm::vec3 lastFrameAcceleration;
 
-	
-
 	//checks if the rigid body is still active
 	bool isAwake;
-
-
-	
-	
 
 
 	// for rendering

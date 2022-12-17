@@ -30,10 +30,10 @@ void Quaternion::normalize() //Normalize the quaternion to unit length, making i
 void Quaternion::operator*=(const Quaternion& multiplier)//Multiplies quaternion by other quaternions
 {
 	Quaternion q = *this;
-	r = q.r * multiplier.r - q.i * multiplier.i - q.j * multiplier.j - q.k * multiplier.k;
-	i = q.i * multiplier.i + q.r * multiplier.r + q.k * multiplier.k - q.j * multiplier.j ;
-	j = q.j * multiplier.j + q.r * multiplier.r + q.i * multiplier.i -  q.k * multiplier.k;
-	r = q.k * multiplier.k + q.r * multiplier.r + q.i * multiplier.i - q.j * multiplier.j;
+	r = q.r * multiplier.r - q.i * multiplier.i - q.j * multiplier.j - q.k * multiplier.k; 
+	i = q.r * multiplier.i + q.i * multiplier.r + q.j * multiplier.k - q.k * multiplier.j;
+	j = q.r * multiplier.j + q.j * multiplier.r + q.k * multiplier.i - q.i * multiplier.k;
+	k = q.r * multiplier.k + q.k * multiplier.r + q.i * multiplier.j - q.j * multiplier.i;
 }
 
 void Quaternion::rotateByVector(const glm::vec3& vector)

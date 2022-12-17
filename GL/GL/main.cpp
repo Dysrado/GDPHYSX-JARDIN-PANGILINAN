@@ -68,7 +68,7 @@ int main(void)
     float height = 800;
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(width, height, "Particle Hw Jardin - Pangilinan", NULL, NULL);
+    window = glfwCreateWindow(width, height, "Physics Engine Phase 3: Jardin - Pangilinan", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -182,13 +182,11 @@ int main(void)
     ParticleGravity* pg = new ParticleGravity(glm::vec3(0,-20,0)); // Gravity
     const static unsigned maxContacts = 256; // number of maximum possible contacts
     ParticleWorld world(maxContacts); // create a particle world
-    //MassAggregateCube* Cube = new MassAggregateCube(&world, pg); // instantiate a mass aggregate cube
 
     Quaternion qIdentity(0, 0, 0, 1);
     World rbworld;
     RigidBody* rb =  new RigidBody(glm::vec3(0, 0, 7), qIdentity);
     rbworld.bodies.push_back(rb);
-    //rb.initVariables(glm::vec3(2, 0, 5), quaternion);
 
     /* Loop until the user closes the window or user presses the Escape key*/
     while (!glfwWindowShouldClose(window))
@@ -214,21 +212,13 @@ int main(void)
                 temp2->initVariables(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), 1); // instantiates a particle depenting on projectileType
                 temp2->init(); // initializes the particle for rendering
 
+                // add the particle to the world
                 world.particles.push_back(temp2);
                 world.registry.add(temp2, pg);
-
-                //// this is used so that the projectile can collide with the cube
-                //for (int i = 0; i < 8; i++) {
-                //    ParticleContact* testContact = new ParticleContact();
-                //    testContact->particle[0] = temp2;
-                //    testContact->particle[1] = world.particles[i];
-                //    world.contactList.push_back(testContact);
-                //    world.contactList.push_back(testContact);           
-                //}
             }
         }
         
-        // Updates the Uniforms
+        // Updates the Uniforms for the camera
         unsigned int projectionLoc = glGetUniformLocation(shaderProgram, "projection");
         glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
@@ -238,7 +228,7 @@ int main(void)
         // Uses the shader program
         glUseProgram(shaderProgram);
 
-        // Bind
+        // Bind VAO
         glBindVertexArray(VAO);
 
         /* Swap front and back buffers */
@@ -248,14 +238,14 @@ int main(void)
         glfwPollEvents();
 
         /* Render here */
+        // clears the frame
         glClear(GL_COLOR_BUFFER_BIT);
 
-        //// Renders the Particles
+        // Renders the objects
         rbworld.render(shaderProgram);
         world.render(shaderProgram);
-       // rb.render(shaderProgram);
 
-        // Runs particles physics
+        // Runs physics
         rbworld.runPhysics(deltaTime, world.particles);
         world.runPhysics(deltaTime);
 

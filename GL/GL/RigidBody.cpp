@@ -1,22 +1,33 @@
 #include "RigidBody.h"
-
+/// <summary>
+/// Constructor
+/// </summary>
+/// <param name="pos"> position of the rigidbody </param>
+/// <param name="rot"> orientation in quaternion of the rigidbody </param>
 RigidBody::RigidBody(glm::vec3 pos, Quaternion rot)
 {
+    // damping
     linearDamping = .95f;
     angularDamping = .95f;
+
+    // mass
     inverseMass = 1;
+
+    // setting the rotation and position
     orientation = rot;
     position = pos;
+
+    // placing rotation and position to the transform matrix
     transformMatrix.setOrientationAndPos(rot, pos);
 
-
+    // intertia tensor initialization
     Matrix3 identity;
     identity.data[0] = 1 / 12 * inverseMass * (2);
     identity.data[4] = 1 / 12 * inverseMass * (2);
     identity.data[8] = 1 / 12 * inverseMass * (2);
     setInertiaTensor(identity);
 
-    // initialitation for the Particle
+    // initialitation for the rendering of the rigidbody
     std::string path = "3D/box.obj";
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> material;
@@ -49,6 +60,9 @@ RigidBody::RigidBody(glm::vec3 pos, Quaternion rot)
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
+/// <summary>
+/// Calclates the position and orientation of the rigidbody and places it into the transform matrix
+/// </summary>
 void RigidBody::calculateDerivedData()
 {
     // calculates the transform matrix
@@ -77,6 +91,7 @@ void RigidBody::calculateDerivedData()
     transformMatrix.data[11] = position.z;
 
     // calculates the inverseInertiaTensorWorld
+    //      created these variables for readability
     Matrix4 rotmat = transformMatrix;
     Matrix3 iitBody = inverseInertiaTensor;
     Matrix3 iitWorld = inverseInertiaTensorWorld;
@@ -103,62 +118,70 @@ void RigidBody::calculateDerivedData()
 
     transformMatrix = rotmat;
     inverseInertiaTensor = iitBody;
-    //inverseInertiaTensorWorld = iitWorld; 
 }
 
 
-
+/// <summary>
+/// Sets the local InertiaTensor
+/// </summary>
+/// <param name="inertiaTensor"></param>
 void RigidBody::setInertiaTensor(const Matrix3 &inertiaTensor)
 {
     inverseInertiaTensor.setInverse(inertiaTensor);
-    //_checkInverseInertiaTensor(inverseInertiaTensor);
 }
 
-
+/// <summary>
+/// Adds force to the overall rigidbody
+/// </summary>
+/// <param name="force"> amount of force to apply </param>
 void RigidBody::addForce(const glm::vec3& force) {
     forceAccum += force;
     isAwake = true;
 }
 
+/// <summary>
+/// Calculations for the physics
+/// </summary>
+/// <param name="duration"> the time difference of each frame </param>
 void RigidBody::integrate(float duration) {
     if (!isAwake) return;
     // get linear acceleration from the force input
     lastFrameAcceleration = acceleration;
     lastFrameAcceleration += forceAccum * inverseMass;
 
-    std::cout << "acceleration: " << acceleration.x << " " << acceleration.y << " " << acceleration.z << std::endl;
-    //std::cout << "Position: " << getPosition().z << "\n";
-
     // get angular acceleration from torque inputs
     glm::vec3 angularAcceleration = inverseInertiaTensorWorld.transform(torqueAccum);
 
-    //std::cout << "angularAcceleration: " << angularAcceleration.x << " " << angularAcceleration.y << " " << angularAcceleration.z << std::endl;
-    
     // adjust the velocities
     velocity += lastFrameAcceleration * duration;
 
     rotation += angularAcceleration * duration;
     
     // drag
-    // check linear damping
     velocity *= pow(linearDamping, duration);
     rotation *= pow(angularDamping, duration);
 
     position += velocity * duration;
-    std::cout << "rotation: " << rotation.x << " " << rotation.y << " " << rotation.z << std::endl;
     orientation.addScaledVector(rotation, duration);
 
+    // reset values
     calculateDerivedData();
-
     clearAccumulators();
     //isAwake = false;
 }
 
+/// <summary>
+/// Removes the forces from the Rigidbody
+/// </summary>
 void RigidBody::clearAccumulators() {
     forceAccum = glm::vec3(0, 0, 0);
     torqueAccum = glm::vec3(0, 0, 0);
 }
 
+/// <summary>
+/// Adds torque to the rigidbody
+/// </summary>
+/// <param name="torque"> how much torque you want to apply </param>
 void RigidBody::addTorque(const glm::vec3& torque)
 {
     torqueAccum += torque;
@@ -166,12 +189,14 @@ void RigidBody::addTorque(const glm::vec3& torque)
 }
 
 
-
+/// <summary>
+/// Renders the rigidbody
+/// </summary>
+/// <param name="shaderProgram"> shader data used to render the rigidbody </param>
 void RigidBody::render(GLuint shaderProgram) {
     // Convert the transformMatrix into a glm::mat4
     // place the transform to the matrix
     glm::mat4 transform = glm::mat4(1.f);
-    //transform = glm::scale(transform, glm::vec3(4,4,4));
     transform = glm::translate(transform, 
         glm::vec3(
             transformMatrix.data[3],
@@ -203,24 +228,37 @@ void RigidBody::render(GLuint shaderProgram) {
     glDrawElements(GL_TRIANGLES, mesh_indices.size(), GL_UNSIGNED_INT, 0);
 };
 
+/// <summary>
+/// Gets a point of the rigidbody then converts it into the world space location
+/// </summary>
+/// <param name="point"> point to convert </param>
+/// <returns> converted point into world space </returns>
 glm::vec3 RigidBody::getPointInWorldSpace(const glm::vec3& point) const
 {
     return transformMatrix.transform(point);
 }
 
+/// <summary>
+/// Adds force into a point of the rigidbody
+/// </summary>
+/// <param name="force"> how much force should be applied to the body </param>
+/// <param name="point"> where should the force be applied </param>
 void RigidBody::addForceAtBodyPoint(const glm::vec3& force, const glm::vec3& point) {
     glm::vec3 pt = getPointInWorldSpace(point);
     
-    //std::cout << "pt " << pt.x << " " << pt.y << " " << pt.z << "\n"; // UNDEFINED
     addForceAtPoint(force, pt); 
     isAwake = true;
     
 }
 
+/// <summary>
+/// Adds force into a point
+/// </summary>
+/// <param name="force"> how much force should be applied to the body </param>
+/// <param name="point"> where should the force be applied </param>
 void RigidBody::addForceAtPoint(const glm::vec3& force,
     const glm::vec3& point)
 {
-
     // Convert to coordinates relative to center of mass.
     glm::vec3 pt = point;
     pt -= position;
@@ -228,16 +266,22 @@ void RigidBody::addForceAtPoint(const glm::vec3& force,
     forceAccum += force;
     torqueAccum += glm::mod(pt, force);
 
-    //std::cout << "Force Acumm: " << forceAccum.x << " " << forceAccum.y << " " << forceAccum.z << std::endl;
-
     isAwake = true;
 }
 
+/// <summary>
+/// Checks if the rigidbody is movable
+/// </summary>
+/// <returns> a bool of if it is movable </returns>
 bool RigidBody::hasFiniteMass() const
 {
     return inverseMass >= 0.0f;
 }
 
+/// <summary>
+/// Gets the mass of the rigidbody
+/// </summary>
+/// <returns> either the mass of the rigidbody or mass of an imovable object </returns>
 float RigidBody::getMass() const
 {
     if (inverseMass == 0) {
@@ -248,6 +292,12 @@ float RigidBody::getMass() const
     }
 }
 
+/// <summary>
+/// sets the acceleration
+/// </summary>
+/// <param name="x"> acceleration in the x-axis </param>
+/// <param name="y"> acceleration in the y-axis </param>
+/// <param name="z"> acceleration in the z-axis </param>
 void RigidBody::setAcceleration(const float x, const float y, const float z)
 {
     acceleration.x = x;
@@ -255,6 +305,10 @@ void RigidBody::setAcceleration(const float x, const float y, const float z)
     acceleration.z = z;
 }
 
+/// <summary>
+/// Gets the position of the rigidbody
+/// </summary>
+/// <returns> the position of the rigidbody </returns>
 glm::vec3 RigidBody::getPosition()
 {
     glm::vec3 temp = glm::vec3(transformMatrix.data[3],

@@ -47,8 +47,8 @@ void Quaternion::addScaledVector(const glm::vec3& vector, float scale)
 	Quaternion q(0, vector.x * scale, vector.y * scale, vector.z * scale);
 	q *= *this;
 	r += q.r * ((float)0.5);
-	r += q.i * ((float)0.5);
-	r += q.j * ((float)0.5);
-	r += q.k * ((float)0.5);
+	i += q.i * ((float)0.5);
+	j += q.j * ((float)0.5);
+	k += q.k * ((float)0.5);
 
 }

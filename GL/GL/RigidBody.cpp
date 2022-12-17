@@ -138,7 +138,7 @@ void RigidBody::integrate(float duration) {
     velocity += lastFrameAcceleration * duration;
 
     rotation += angularAcceleration * duration;
-
+    
     // drag
     // check linear damping
     velocity *= pow(linearDamping, duration);
@@ -151,6 +151,7 @@ void RigidBody::integrate(float duration) {
     calculateDerivedData();
 
     clearAccumulators();
+    //isAwake = false;
 }
 
 void RigidBody::clearAccumulators() {
